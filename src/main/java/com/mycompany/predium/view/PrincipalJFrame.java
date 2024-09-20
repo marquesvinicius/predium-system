@@ -2,9 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.predium;
-import com.mycompany.predium.utils.TableUtils;
+package com.mycompany.predium.view;
 
+import com.mycompany.predium.FileWatcher;
+import com.mycompany.predium.controller.OrdemServicoController;
+import com.mycompany.predium.utils.TableUtils;
+import com.mycompany.predium.utils.WindowUtils;
 
 import java.awt.Frame;
 import java.io.BufferedReader;
@@ -21,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author MarquesV
@@ -35,7 +37,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
      */
     public PrincipalJFrame(String nomeDoUsuario) {
         initComponents();
-        this.setLocationRelativeTo(null);
+        WindowUtils.centralizarTela(this);
         olaUserJLabel.setText("Olá " + nomeDoUsuario + "!");
         this.ordemController = new OrdemServicoController();
         carregarOrdensParaTabela();
@@ -47,7 +49,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public PrincipalJFrame() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        WindowUtils.centralizarTela(this);
         olaUserJLabel.setText("Olá!");
         TableUtils.configureNonEditableTable(ordensjTable);
     }
@@ -394,7 +396,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 999, Short.MAX_VALUE)
+            .addComponent(mainJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

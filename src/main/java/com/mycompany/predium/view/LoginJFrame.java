@@ -2,50 +2,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.predium;
+package com.mycompany.predium.view;
 
-import javax.swing.JOptionPane;
-
+import com.mycompany.predium.controller.CadastroHandler;
+import com.mycompany.predium.controller.LoginHandler;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 /**
  *
  * @author MarquesV
  */
-public class CadastroJFrame extends javax.swing.JFrame {
-    
-    private LoginJFrame parentFrame;
+import com.mycompany.predium.controller.LoginHandler;
+import com.mycompany.predium.utils.WindowUtils;
+
+public class LoginJFrame extends javax.swing.JFrame {
+
+    private LoginHandler loginHandler;
     private CadastroHandler cadastroHandler;
 
-
-    /**
-     * Creates new form CadastroJFrame
-     */
-public CadastroJFrame(LoginJFrame parent) {
-    this.parentFrame = parent;
-    initComponents();
-    this.setLocationRelativeTo(null);
-    // Adiciona o comportamento para fechar apenas a janela de cadastro
-    this.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosing(java.awt.event.WindowEvent e) {
-            // Mostra a janela de login novamente quando a de cadastro for fechada
-            parentFrame.setVisible(true);
-            // Libera recursos dessa janela
-            dispose();
-        }
-    });
-}
-    
-    public CadastroJFrame(CadastroHandler cadastroHandler) {
+    public LoginJFrame(CadastroHandler cadastroHandler) {
         initComponents();
+        WindowUtils.centralizarTela(this);
         this.cadastroHandler = cadastroHandler;
-    }
-    
-    public CadastroJFrame(){
-        initComponents();
-    }
-    
-    
+        loginHandler = new LoginHandler(cadastroHandler.getUsuarios());
 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,16 +43,20 @@ public CadastroJFrame(LoginJFrame parent) {
         jSeparator2 = new javax.swing.JSeparator();
         usernameJLabel = new javax.swing.JLabel();
         senhaJLabel = new javax.swing.JLabel();
+        entrarJButton = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        cadastreJLabel = new javax.swing.JLabel();
         registrarJButton = new javax.swing.JButton();
         jPasswordField = new javax.swing.JPasswordField();
         usernameJScrollPanel = new javax.swing.JScrollPane();
         usernameJTextArea = new javax.swing.JTextArea();
-        javax.swing.JLabel confirmarSenhaJLabel = new javax.swing.JLabel();
-        confirmPasswordField = new javax.swing.JPasswordField();
         imgLogoJLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro - Predium");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login - Predium");
+        setBackground(new java.awt.Color(0, 255, 0));
+        setName("loginJFrame"); // NOI18N
+        setResizable(false);
 
         mainJPanel.setBackground(new java.awt.Color(245, 245, 245));
 
@@ -80,7 +65,7 @@ public CadastroJFrame(LoginJFrame parent) {
         loginTitleJLabel.setBackground(new java.awt.Color(37, 57, 71));
         loginTitleJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         loginTitleJLabel.setForeground(new java.awt.Color(37, 57, 71));
-        loginTitleJLabel.setText("Cadastro");
+        loginTitleJLabel.setText("Login");
 
         usernameJLabel.setBackground(new java.awt.Color(37, 57, 71));
         usernameJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -91,6 +76,21 @@ public CadastroJFrame(LoginJFrame parent) {
         senhaJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         senhaJLabel.setForeground(new java.awt.Color(37, 57, 71));
         senhaJLabel.setText("Senha");
+
+        entrarJButton.setBackground(new java.awt.Color(39, 57, 69));
+        entrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        entrarJButton.setForeground(new java.awt.Color(255, 255, 255));
+        entrarJButton.setText("ENTRAR");
+        entrarJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entrarJButtonActionPerformed(evt);
+            }
+        });
+
+        cadastreJLabel.setBackground(new java.awt.Color(37, 57, 71));
+        cadastreJLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cadastreJLabel.setForeground(new java.awt.Color(37, 57, 71));
+        cadastreJLabel.setText("Cadastre-se");
 
         registrarJButton.setBackground(new java.awt.Color(39, 57, 69));
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -107,6 +107,7 @@ public CadastroJFrame(LoginJFrame parent) {
         jPasswordField.setForeground(new java.awt.Color(36, 60, 69));
         jPasswordField.setText("jPasswordField1");
         jPasswordField.setToolTipText("Insira sua senha");
+        jPasswordField.setActionCommand("null");
         jPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordFieldActionPerformed(evt);
@@ -121,22 +122,6 @@ public CadastroJFrame(LoginJFrame parent) {
         usernameJTextArea.setToolTipText("Insira seu username");
         usernameJScrollPanel.setViewportView(usernameJTextArea);
 
-        confirmarSenhaJLabel.setBackground(new java.awt.Color(37, 57, 71));
-        confirmarSenhaJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        confirmarSenhaJLabel.setForeground(new java.awt.Color(37, 57, 71));
-        confirmarSenhaJLabel.setText("Confirmar Senha");
-
-        confirmPasswordField.setBackground(new java.awt.Color(255, 255, 255));
-        confirmPasswordField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        confirmPasswordField.setForeground(new java.awt.Color(36, 60, 69));
-        confirmPasswordField.setText("jPasswordField1");
-        confirmPasswordField.setToolTipText("Confirme sua senha");
-        confirmPasswordField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmPasswordFieldActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout loginJPanelLayout = new javax.swing.GroupLayout(loginJPanel);
         loginJPanel.setLayout(loginJPanelLayout);
         loginJPanelLayout.setHorizontalGroup(
@@ -147,13 +132,14 @@ public CadastroJFrame(LoginJFrame parent) {
                     .addComponent(senhaJLabel)
                     .addGroup(loginJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPasswordField)
+                        .addComponent(entrarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cadastreJLabel)
                         .addComponent(loginTitleJLabel)
                         .addComponent(usernameJLabel)
                         .addComponent(jSeparator2)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(registrarJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(usernameJScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                        .addComponent(confirmarSenhaJLabel)
-                        .addComponent(confirmPasswordField)))
+                        .addComponent(usernameJScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         loginJPanelLayout.setVerticalGroup(
@@ -167,17 +153,19 @@ public CadastroJFrame(LoginJFrame parent) {
                 .addComponent(usernameJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(usernameJScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(26, 26, 26)
                 .addComponent(senhaJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(entrarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(confirmarSenhaJLabel)
+                .addComponent(cadastreJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(confirmPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
                 .addComponent(registrarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         imgLogoJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -205,7 +193,7 @@ public CadastroJFrame(LoginJFrame parent) {
                     .addGroup(mainJPanelLayout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addComponent(imgLogoJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 63, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -224,42 +212,33 @@ public CadastroJFrame(LoginJFrame parent) {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     private void registrarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarJButtonActionPerformed
-    String username = usernameJTextArea.getText().trim();
-    String senha = new String(jPasswordField.getPassword());
-    String confirmarSenha = new String(confirmPasswordField.getPassword());
-
-    if (username.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (!senha.equals(confirmarSenha)) {
-        JOptionPane.showMessageDialog(this, "Senhas não conferem!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    CadastroHandler cadastroHandler = new CadastroHandler();
-    if (cadastroHandler.usernameExiste(username)) {
-        JOptionPane.showMessageDialog(this, "Usuário já existe!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    cadastroHandler.cadastrarUsuario(username, senha);
-
-    JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-    this.dispose();
-
-    // Verifica se parentFrame não é null e faz a tela de login visível
-    if (parentFrame != null) {
-        parentFrame.setVisible(true);
-    }
+        // TODO add your handling code here:
+        CadastroJFrame cadastroFrame = new CadastroJFrame(this.cadastroHandler);
+        cadastroFrame.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_registrarJButtonActionPerformed
 
-    private void confirmPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPasswordFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_confirmPasswordFieldActionPerformed
+    private void entrarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrarJButtonActionPerformed
+        String username = usernameJTextArea.getText();
+        String senha = new String(jPasswordField.getPassword());
+        System.out.println("Username: " + username);
+        System.out.println("Senha: " + senha);
+
+        // Chama o método login e verifica o retorno
+        boolean loginSucesso = loginHandler.login(username, senha);
+
+        if (loginSucesso) {
+            // Fecha o LoginJFrame e abre a tela principal
+            PrincipalJFrame principalFrame = new PrincipalJFrame(username);
+            principalFrame.setVisible(true);
+            this.dispose(); // Fecha a janela de login
+
+        } else {
+            // Exibe uma mensagem de erro ou faz alguma ação em caso de falha de login
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuário ou senha incorretos.");
+        }
+    }//GEN-LAST:event_entrarJButtonActionPerformed
 
     private void jPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldActionPerformed
         // TODO add your handling code here:
@@ -270,10 +249,6 @@ public CadastroJFrame(LoginJFrame parent) {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -281,30 +256,29 @@ public CadastroJFrame(LoginJFrame parent) {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastroJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastroJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastroJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastroJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(LoginJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CadastroJFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            // Cria um CadastroHandler dummy para passar para o LoginJFrame
+            CadastroHandler dummyCadastroHandler = new CadastroHandler();
+            new LoginJFrame(dummyCadastroHandler).setVisible(true);
         });
     }
 
+    public CadastroHandler getCadastroHandler() {
+        return cadastroHandler;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField confirmPasswordField;
+    private javax.swing.JLabel cadastreJLabel;
+    private javax.swing.JButton entrarJButton;
     private javax.swing.JLabel imgLogoJLabel;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JPanel loginJPanel;
     private javax.swing.JLabel loginTitleJLabel;
     private javax.swing.JPanel mainJPanel;

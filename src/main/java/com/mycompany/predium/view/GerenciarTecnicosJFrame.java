@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.predium;
+package com.mycompany.predium.view;
 
 import com.mycompany.predium.utils.TableUtils;
+import com.mycompany.predium.utils.WindowUtils;
 
 /**
  *
@@ -17,9 +18,9 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
      */
     public GerenciarTecnicosJFrame() {
         initComponents();
-        this.setLocationRelativeTo(null);
         TableUtils.configureNonEditableTable(tecnicosjTable);
-        
+        WindowUtils.centralizarTela(this);
+
     }
 
     /**

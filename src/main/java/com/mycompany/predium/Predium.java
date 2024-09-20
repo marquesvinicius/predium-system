@@ -4,6 +4,9 @@
 
 package com.mycompany.predium;
 
+import com.mycompany.predium.view.LoginJFrame;
+import com.mycompany.predium.controller.CadastroHandler;
+
 public class Predium {
 
     public static void main(String[] args) {

@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.predium;
+package com.mycompany.predium.view;
 
+import com.mycompany.predium.model.OrdemServico;
+import com.mycompany.predium.controller.OrdemServicoController;
+import com.mycompany.predium.utils.WindowUtils;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +21,7 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
     public RegistrarOrdemJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
+        WindowUtils.centralizarTela(this);
     }
 
     /**
@@ -178,32 +181,31 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
 
     private void registrarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarJButtonActionPerformed
         // TODO add your handling code here:
-        
 
-    String descricao = descricaoJTextArea.getText();
-    String local = localJTextArea.getText();
-    String prioridade = (String) prioridadeJComboBox.getSelectedItem();
-    
-     if (descricao.isEmpty() || local.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
-        return;
-     } 
-    
-    // Gerar um ID único para a nova ordem (em um sistema real, isso poderia ser feito pelo banco de dados)
-    int novoId = OrdemServicoController.gerarNovoId();
-    
-    // Criar uma nova Ordem de Serviço
-    OrdemServico novaOrdem = new OrdemServico(novoId, descricao, local, prioridade);
-    
-    // Adicionar à lista de ordens (controlada por OrdemServicoController)
-    OrdemServicoController controller = new OrdemServicoController();
-    controller.adicionarOrdem(novaOrdem);
-    
-    // Exibir uma mensagem de sucesso
-    JOptionPane.showMessageDialog(this, "Ordem de serviço registrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-    
-    // Fechar o diálogo
-    this.dispose();
+        String descricao = descricaoJTextArea.getText();
+        String local = localJTextArea.getText();
+        String prioridade = (String) prioridadeJComboBox.getSelectedItem();
+
+        if (descricao.isEmpty() || local.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
+            return;
+        }
+
+        // Gerar um ID único para a nova ordem (em um sistema real, isso poderia ser feito pelo banco de dados)
+        int novoId = OrdemServicoController.gerarNovoId();
+
+        // Criar uma nova Ordem de Serviço
+        OrdemServico novaOrdem = new OrdemServico(novoId, descricao, local, prioridade);
+
+        // Adicionar à lista de ordens (controlada por OrdemServicoController)
+        OrdemServicoController controller = new OrdemServicoController();
+        controller.adicionarOrdem(novaOrdem);
+
+        // Exibir uma mensagem de sucesso
+        JOptionPane.showMessageDialog(this, "Ordem de serviço registrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        // Fechar o diálogo
+        this.dispose();
     }//GEN-LAST:event_registrarJButtonActionPerformed
 
     /**

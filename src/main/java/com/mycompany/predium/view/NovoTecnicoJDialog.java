@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.predium;
+package com.mycompany.predium.view;
+
+import com.mycompany.predium.utils.WindowUtils;
 
 /**
  *
@@ -16,7 +18,7 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
     public NovoTecnicoJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
+        WindowUtils.centralizarTela(this);
     }
 
     /**
@@ -157,7 +159,7 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
     private void registrarTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarTecnicoJButtonActionPerformed
         // TODO add your handling code here:
 
-       
+
     }//GEN-LAST:event_registrarTecnicoJButtonActionPerformed
 
     /**

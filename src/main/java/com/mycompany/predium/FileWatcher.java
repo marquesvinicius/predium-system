@@ -8,6 +8,7 @@ package com.mycompany.predium;
  *
  * @author MarquesV
  */
+import com.mycompany.predium.view.PrincipalJFrame;
 import java.io.IOException;
 import java.nio.file.*;
 import static java.nio.file.StandardWatchEventKinds.*;

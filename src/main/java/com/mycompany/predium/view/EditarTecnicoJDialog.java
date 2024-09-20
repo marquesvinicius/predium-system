@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.mycompany.predium;
+package com.mycompany.predium.view;
+
+import com.mycompany.predium.utils.WindowUtils;
 
 /**
  *
@@ -16,6 +18,8 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
     public EditarTecnicoJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        WindowUtils.centralizarTela(this);
+
     }
 
     /**
