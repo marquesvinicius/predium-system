@@ -5,49 +5,85 @@
 package com.mycompany.predium.view;
 
 import com.mycompany.predium.controller.CadastroHandler;
+import com.mycompany.predium.controller.LoginHandler;
+import com.mycompany.predium.model.Usuario;
 import javax.swing.JOptionPane;
 import com.mycompany.predium.utils.WindowUtils;
+import com.mycompany.predium.utils.PlaceholderField;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
 
 /**
  *
  * @author MarquesV
  */
 public class CadastroJFrame extends javax.swing.JFrame {
-    
+
     private LoginJFrame parentFrame;
     private CadastroHandler cadastroHandler;
-
+    private LoginHandler loginHandler;
 
     /**
      * Creates new form CadastroJFrame
      */
-public CadastroJFrame(LoginJFrame parent) {
-    this.parentFrame = parent;
-    initComponents();
-    WindowUtils.centralizarTela(this);
-    // Adiciona o comportamento para fechar apenas a janela de cadastro
-    this.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosing(java.awt.event.WindowEvent e) {
-            // Mostra a janela de login novamente quando a de cadastro for fechada
-            parentFrame.setVisible(true);
-            // Libera recursos dessa janela
-            dispose();
-        }
-    });
-}
-    
-    public CadastroJFrame(CadastroHandler cadastroHandler) {
-        initComponents();
+    public CadastroJFrame(LoginJFrame parent, CadastroHandler cadastroHandler, LoginHandler loginHandler) {
+        this.parentFrame = parent;
         this.cadastroHandler = cadastroHandler;
-    }
-    
-    public CadastroJFrame(){
+        this.loginHandler = loginHandler; // Armazena o LoginHandler
         initComponents();
-    }
-    
-    
+        
+        setTabFocus(usernameJTextArea);
+        setTabFocus(jPasswordField);
+        setTabFocus(confirmPasswordField);
+        
+        if (jPasswordField != null && confirmPasswordField != null) {
+            new PlaceholderField(jPasswordField, "Digite sua senha");
+            new PlaceholderField(confirmPasswordField, "Confirme sua senha");
+        } else {
+            throw new IllegalStateException("Campos de senha não inicializados!");
+        }
 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                if (parentFrame != null) {
+                    parentFrame.setVisible(true);
+                }
+                dispose();
+            }
+        });
+
+        WindowUtils.centralizarTela(this);
+    }
+
+    public CadastroJFrame() {
+        initComponents();
+        if (jPasswordField != null && confirmPasswordField != null) {
+            new PlaceholderField(jPasswordField, "Digite sua senha");
+            new PlaceholderField(confirmPasswordField, "Confirme sua senha");
+        } else {
+            throw new IllegalStateException("Campos de senha não inicializados!");
+        }
+        WindowUtils.centralizarTela(this);
+
+    }
+
+    private void setTabFocus(JComponent component) {
+        component.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                    e.consume(); // Evita que a tabulação padrão ocorra
+                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
+                    if (next != null) {
+                        next.requestFocus(); // Move o foco para o próximo componente
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,6 +110,7 @@ public CadastroJFrame(LoginJFrame parent) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro - Predium");
+        setResizable(false);
 
         mainJPanel.setBackground(new java.awt.Color(245, 245, 245));
 
@@ -98,6 +135,7 @@ public CadastroJFrame(LoginJFrame parent) {
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("CADASTRAR");
+        registrarJButton.setFocusTraversalPolicyProvider(true);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarJButtonActionPerformed(evt);
@@ -109,6 +147,8 @@ public CadastroJFrame(LoginJFrame parent) {
         jPasswordField.setForeground(new java.awt.Color(36, 60, 69));
         jPasswordField.setText("jPasswordField1");
         jPasswordField.setToolTipText("Insira sua senha");
+        jPasswordField.setFocusTraversalPolicyProvider(true);
+        jPasswordField.setNextFocusableComponent(confirmPasswordField);
         jPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordFieldActionPerformed(evt);
@@ -121,6 +161,8 @@ public CadastroJFrame(LoginJFrame parent) {
         usernameJTextArea.setForeground(new java.awt.Color(36, 60, 69));
         usernameJTextArea.setRows(1);
         usernameJTextArea.setToolTipText("Insira seu username");
+        usernameJTextArea.setFocusTraversalPolicyProvider(true);
+        usernameJTextArea.setNextFocusableComponent(jPasswordField);
         usernameJScrollPanel.setViewportView(usernameJTextArea);
 
         confirmarSenhaJLabel.setBackground(new java.awt.Color(37, 57, 71));
@@ -133,6 +175,8 @@ public CadastroJFrame(LoginJFrame parent) {
         confirmPasswordField.setForeground(new java.awt.Color(36, 60, 69));
         confirmPasswordField.setText("jPasswordField1");
         confirmPasswordField.setToolTipText("Confirme sua senha");
+        confirmPasswordField.setFocusTraversalPolicyProvider(true);
+        confirmPasswordField.setNextFocusableComponent(registrarJButton);
         confirmPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmPasswordFieldActionPerformed(evt);
@@ -226,37 +270,36 @@ public CadastroJFrame(LoginJFrame parent) {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void registrarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarJButtonActionPerformed
-    String username = usernameJTextArea.getText().trim();
-    String senha = new String(jPasswordField.getPassword());
-    String confirmarSenha = new String(confirmPasswordField.getPassword());
+        String username = usernameJTextArea.getText().trim();
+        String senha = new String(jPasswordField.getPassword());
+        String confirmarSenha = new String(confirmPasswordField.getPassword());
 
-    if (username.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (username.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    if (!senha.equals(confirmarSenha)) {
-        JOptionPane.showMessageDialog(this, "Senhas não conferem!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (!senha.equals(confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "Senhas não conferem!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    CadastroHandler cadastroHandler = new CadastroHandler();
-    if (cadastroHandler.usernameExiste(username)) {
-        JOptionPane.showMessageDialog(this, "Usuário já existe!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (cadastroHandler.usernameExiste(username)) {
+            JOptionPane.showMessageDialog(this, "Usuário já existe!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    cadastroHandler.cadastrarUsuario(username, senha);
+        cadastroHandler.cadastrarUsuario(username, senha);
+        loginHandler.adicionarUsuario(new Usuario(username, senha)); // Adiciona o novo usuário ao LoginHandler
 
-    JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-    this.dispose();
+        JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
 
-    // Verifica se parentFrame não é null e faz a tela de login visível
-    if (parentFrame != null) {
-        parentFrame.setVisible(true);
-    }
+        if (parentFrame != null) {
+            parentFrame.setVisible(true);
+        }
     }//GEN-LAST:event_registrarJButtonActionPerformed
 
     private void confirmPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPasswordFieldActionPerformed

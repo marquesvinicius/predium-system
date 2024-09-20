@@ -5,6 +5,7 @@
 package com.mycompany.predium.view;
 
 import com.mycompany.predium.FileWatcher;
+import com.mycompany.predium.controller.LoginHandler;
 import com.mycompany.predium.controller.OrdemServicoController;
 import com.mycompany.predium.utils.TableUtils;
 import com.mycompany.predium.utils.WindowUtils;
@@ -30,20 +31,23 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PrincipalJFrame extends javax.swing.JFrame {
 
+    private LoginHandler loginHandler;
     private OrdemServicoController ordemController;
 
     /**
      * Creates new form PrincipalJFrame
      */
-    public PrincipalJFrame(String nomeDoUsuario) {
+    public PrincipalJFrame(String nomeDoUsuario, LoginHandler loginHandler) {
         initComponents();
         WindowUtils.centralizarTela(this);
         olaUserJLabel.setText("Olá " + nomeDoUsuario + "!");
+        this.loginHandler = loginHandler;
         this.ordemController = new OrdemServicoController();
         carregarOrdensParaTabela();
         atualizarTabela();
+
         Path path = Paths.get("src/main/resources/db");
-        new FileWatcher(path, this).start(); // Inicia o monitoramento do arquivo
+        new FileWatcher(path, this, loginHandler).start(); // Inicia o monitoramento do arquivo de ordens
         TableUtils.configureNonEditableTable(ordensjTable);
     }
 
@@ -140,6 +144,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Principal - Predium");
+        setResizable(false);
 
         mainJPanel.setBackground(new java.awt.Color(245, 245, 245));
         mainJPanel.setToolTipText("");
@@ -396,7 +401,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
+            .addComponent(mainJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 999, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

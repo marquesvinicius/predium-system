@@ -4,16 +4,23 @@
  */
 package com.mycompany.predium.view;
 
+import com.mycompany.predium.FileWatcher;
 import com.mycompany.predium.controller.CadastroHandler;
-import com.mycompany.predium.controller.LoginHandler;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 /**
  *
  * @author MarquesV
  */
 import com.mycompany.predium.controller.LoginHandler;
+import com.mycompany.predium.model.Usuario;
+import com.mycompany.predium.utils.PlaceholderField;
 import com.mycompany.predium.utils.WindowUtils;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import javax.swing.JComponent;
 
 public class LoginJFrame extends javax.swing.JFrame {
 
@@ -23,9 +30,45 @@ public class LoginJFrame extends javax.swing.JFrame {
     public LoginJFrame(CadastroHandler cadastroHandler) {
         initComponents();
         WindowUtils.centralizarTela(this);
+        new PlaceholderField(jPasswordField);
         this.cadastroHandler = cadastroHandler;
         loginHandler = new LoginHandler(cadastroHandler.getUsuarios());
 
+        setTabFocus(usernameJTextArea);
+        setTabFocus(jPasswordField);
+        setTabFocus(entrarJButton);
+        setTabFocus(registrarJButton);
+
+        Path path = Paths.get("src/main/resources/db");
+        new FileWatcher(path, loginHandler).start(); // Inicia o monitoramento do arquivo de usuários
+    }
+    
+        private void setTabFocus(JComponent component) {
+        component.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                    e.consume(); // Evita que a tabulação padrão ocorra
+                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
+                    if (next != null) {
+                        next.requestFocus(); // Move o foco para o próximo componente
+                    }
+                }
+            }
+        });
+    }
+
+    public LoginHandler getLoginHandler() {
+        return loginHandler;
+    }
+
+    public void atualizarUsuarios(List<Usuario> novosUsuarios) {
+        loginHandler.atualizarUsuarios(novosUsuarios);
+
+        // Imprime informações sobre novos usuários
+        for (Usuario usuario : novosUsuarios) {
+            System.out.println("Usuário adicionado! Username do novo usuário: " + usuario.getUsername());
+        }
     }
 
     /**
@@ -55,32 +98,40 @@ public class LoginJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login - Predium");
         setBackground(new java.awt.Color(0, 255, 0));
+        setFocusable(false);
         setName("loginJFrame"); // NOI18N
         setResizable(false);
 
         mainJPanel.setBackground(new java.awt.Color(245, 245, 245));
+        mainJPanel.setFocusable(false);
 
         loginJPanel.setBackground(new java.awt.Color(121, 203, 180));
+        loginJPanel.setFocusable(false);
 
         loginTitleJLabel.setBackground(new java.awt.Color(37, 57, 71));
         loginTitleJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         loginTitleJLabel.setForeground(new java.awt.Color(37, 57, 71));
         loginTitleJLabel.setText("Login");
+        loginTitleJLabel.setFocusable(false);
 
         usernameJLabel.setBackground(new java.awt.Color(37, 57, 71));
         usernameJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         usernameJLabel.setForeground(new java.awt.Color(37, 57, 71));
         usernameJLabel.setText("Username");
+        usernameJLabel.setFocusable(false);
 
         senhaJLabel.setBackground(new java.awt.Color(37, 57, 71));
         senhaJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         senhaJLabel.setForeground(new java.awt.Color(37, 57, 71));
         senhaJLabel.setText("Senha");
+        senhaJLabel.setFocusable(false);
 
         entrarJButton.setBackground(new java.awt.Color(39, 57, 69));
         entrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         entrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         entrarJButton.setText("ENTRAR");
+        entrarJButton.setFocusTraversalPolicyProvider(true);
+        entrarJButton.setNextFocusableComponent(registrarJButton);
         entrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 entrarJButtonActionPerformed(evt);
@@ -91,11 +142,13 @@ public class LoginJFrame extends javax.swing.JFrame {
         cadastreJLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastreJLabel.setForeground(new java.awt.Color(37, 57, 71));
         cadastreJLabel.setText("Cadastre-se");
+        cadastreJLabel.setFocusable(false);
 
         registrarJButton.setBackground(new java.awt.Color(39, 57, 69));
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("CADASTRAR");
+        registrarJButton.setFocusTraversalPolicyProvider(true);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarJButtonActionPerformed(evt);
@@ -108,11 +161,15 @@ public class LoginJFrame extends javax.swing.JFrame {
         jPasswordField.setText("jPasswordField1");
         jPasswordField.setToolTipText("Insira sua senha");
         jPasswordField.setActionCommand("null");
+        jPasswordField.setFocusTraversalPolicyProvider(true);
+        jPasswordField.setNextFocusableComponent(entrarJButton);
         jPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordFieldActionPerformed(evt);
             }
         });
+
+        usernameJScrollPanel.setFocusable(false);
 
         usernameJTextArea.setBackground(new java.awt.Color(255, 255, 255));
         usernameJTextArea.setColumns(20);
@@ -120,6 +177,8 @@ public class LoginJFrame extends javax.swing.JFrame {
         usernameJTextArea.setForeground(new java.awt.Color(36, 60, 69));
         usernameJTextArea.setRows(1);
         usernameJTextArea.setToolTipText("Insira seu username");
+        usernameJTextArea.setFocusTraversalPolicyProvider(true);
+        usernameJTextArea.setNextFocusableComponent(jPasswordField);
         usernameJScrollPanel.setViewportView(usernameJTextArea);
 
         javax.swing.GroupLayout loginJPanelLayout = new javax.swing.GroupLayout(loginJPanel);
@@ -171,6 +230,7 @@ public class LoginJFrame extends javax.swing.JFrame {
         imgLogoJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imgLogoJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/predium-logo+text.png"))); // NOI18N
         imgLogoJLabel.setText("jLabel6");
+        imgLogoJLabel.setFocusable(false);
 
         javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(mainJPanel);
         mainJPanel.setLayout(mainJPanelLayout);
@@ -214,7 +274,7 @@ public class LoginJFrame extends javax.swing.JFrame {
 
     private void registrarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarJButtonActionPerformed
         // TODO add your handling code here:
-        CadastroJFrame cadastroFrame = new CadastroJFrame(this.cadastroHandler);
+        CadastroJFrame cadastroFrame = new CadastroJFrame(this, cadastroHandler, loginHandler);
         cadastroFrame.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_registrarJButtonActionPerformed
@@ -230,7 +290,7 @@ public class LoginJFrame extends javax.swing.JFrame {
 
         if (loginSucesso) {
             // Fecha o LoginJFrame e abre a tela principal
-            PrincipalJFrame principalFrame = new PrincipalJFrame(username);
+            PrincipalJFrame principalFrame = new PrincipalJFrame(username, loginHandler);
             principalFrame.setVisible(true);
             this.dispose(); // Fecha a janela de login
 

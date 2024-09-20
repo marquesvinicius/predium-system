@@ -42,6 +42,7 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
         localJTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(187, 187, 187));
         jPanel1.setPreferredSize(new java.awt.Dimension(804, 720));
@@ -127,7 +128,6 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(prioridadeJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))

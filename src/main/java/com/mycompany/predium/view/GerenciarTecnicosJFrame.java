@@ -41,8 +41,9 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
         excluirTecnicoJButton = new javax.swing.JButton();
         editarTecnicoJButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciar Técnicos - Predium");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(187, 187, 187));
 

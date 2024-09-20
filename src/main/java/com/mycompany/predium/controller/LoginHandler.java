@@ -14,10 +14,21 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class LoginHandler {
+
     private List<Usuario> usuarios;
 
     public LoginHandler(List<Usuario> usuarios) {
         this.usuarios = usuarios;
+    }
+
+    public void atualizarUsuarios(List<Usuario> novosUsuarios) {
+        this.usuarios = novosUsuarios; // Atualiza a lista de usuários com a nova lista
+    }
+
+    public void adicionarUsuario(Usuario usuario) {
+        if (!usuarios.contains(usuario)) { // Verifica se o usuário já não está na lista
+            usuarios.add(usuario); // Adiciona o novo usuário
+        }
     }
 
     public boolean autenticarUsuario(String username, String senha) {
@@ -35,7 +46,6 @@ public class LoginHandler {
             JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Username ou senha incorretos.");
             return false;
         }
     }

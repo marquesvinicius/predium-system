@@ -6,7 +6,9 @@ package com.mycompany.predium.view;
 
 import com.mycompany.predium.model.OrdemServico;
 import com.mycompany.predium.controller.OrdemServicoController;
+import com.mycompany.predium.utils.PlaceholderField;
 import com.mycompany.predium.utils.WindowUtils;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +23,12 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
     public RegistrarOrdemJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        JLabel invisibleLabel = new JLabel();
+        invisibleLabel.setVisible(false);
+        this.add(invisibleLabel);
+        invisibleLabel.requestFocusInWindow();
+        new PlaceholderField(descricaoJTextArea, "Ex: Consertar vazamento; Trocar lâmpadas; Pintura de paredes; Manutenção de ar-condicionado; Limpeza de caixa d'água, etc.");
+        new PlaceholderField(localJTextArea, "Ex: Apto. 123");
         WindowUtils.centralizarTela(this);
     }
 
@@ -47,6 +55,7 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Ordem - Predium");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(187, 187, 187));
 
@@ -57,7 +66,10 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         descricaoJTextArea.setBackground(new java.awt.Color(255, 255, 255));
         descricaoJTextArea.setColumns(20);
         descricaoJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        descricaoJTextArea.setLineWrap(true);
         descricaoJTextArea.setRows(1);
+        descricaoJTextArea.setWrapStyleWord(true);
+        descricaoJTextArea.setAutoscrolls(false);
         jScrollPane1.setViewportView(descricaoJTextArea);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -71,7 +83,6 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         localJTextArea.setColumns(20);
         localJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         localJTextArea.setRows(1);
-        localJTextArea.setText("Ex: Apto. 123");
         localJTextArea.setToolTipText("");
         jScrollPane2.setViewportView(localJTextArea);
 
@@ -186,8 +197,10 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         String local = localJTextArea.getText();
         String prioridade = (String) prioridadeJComboBox.getSelectedItem();
 
-        if (descricao.isEmpty() || local.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
+        // Verifica se os campos estão vazios ou se contêm o texto do placeholder 
+        if (descricao.isEmpty() || descricao.equals("Ex: Consertar vazamento; Trocar lâmpadas; Pintura de paredes; Manutenção de ar-condicionado; Limpeza de caixa d'água, etc.")
+                || local.isEmpty() || local.equals("Ex: Apto. 123")) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos corretamente.");
             return;
         }
 
