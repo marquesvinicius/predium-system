@@ -1,7 +1,6 @@
 com\mycompany\predium\view\NovoTecnicoJDialog$2.class
 com\mycompany\predium\view\EditarTecnicoJDialog.class
 com\mycompany\predium\view\RegistrarOrdemJDialog$4$1.class
-com\mycompany\predium\view\NovoTecnicoJDialog$3$1.class
 com\mycompany\predium\view\PrincipalJFrame$1.class
 com\mycompany\predium\model\OrdemServico.class
 com\mycompany\predium\FileWatcher.class
@@ -31,12 +30,14 @@ com\mycompany\predium\view\PrincipalJFrame$3.class
 com\mycompany\predium\view\RegistrarOrdemJDialog$2.class
 com\mycompany\predium\controller\LoginHandler.class
 com\mycompany\predium\controller\OrdemServicoController.class
+com\mycompany\predium\view\NovoTecnicoJDialog$4$1.class
 com\mycompany\predium\utils\PlaceholderField$1.class
 com\mycompany\predium\view\EditarTecnicoJDialog$2.class
 com\mycompany\predium\view\GerenciarTecnicosJFrame$1.class
 com\mycompany\predium\view\PrincipalJFrame$6.class
 com\mycompany\predium\view\EditarTecnicoJDialog$4$1.class
 com\mycompany\predium\view\CadastroJFrame$2.class
+com\mycompany\predium\view\NovoTecnicoJDialog$4.class
 com\mycompany\predium\utils\PlaceholderField.class
 com\mycompany\predium\view\PrincipalJFrame$10.class
 com\mycompany\predium\view\CadastroJFrame$6.class

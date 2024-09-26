@@ -20,44 +20,110 @@ import java.util.List;
 
 public class TecnicoController {
 
-    private static final String ARQUIVO_TECNICOS = "tecnicos.csv";
+    private List<Tecnico> tecnicos;
+    private final String CSV_FILE_PATH = "src/main/resources/db/tecnicos.csv";
+    private int nextId;
 
     public TecnicoController() {
-        verificarArquivo();
+        tecnicos = new ArrayList<>();
+        verificarOuCriarArquivo();
+        carregarTecnicos();
+        if (tecnicos.isEmpty()) {
+            nextId = 1;
+        } else {
+            nextId = tecnicos.get(tecnicos.size() - 1).getId() + 1;
+        }
     }
 
-    private void verificarArquivo() {
-        File file = new File(ARQUIVO_TECNICOS);
+    private void verificarOuCriarArquivo() {
+        File file = new File(CSV_FILE_PATH);
         if (!file.exists()) {
             try {
-                file.createNewFile();
-                System.out.println("Arquivo 'tecnicos.csv' criado com sucesso.");
+                File dir = file.getParentFile();
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                    writer.write("id,nome,especialidade");
+                    writer.newLine();
+                }
             } catch (IOException e) {
-                System.err.println("Erro ao criar o arquivo 'tecnicos.csv': " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
 
-    public void adicionarTecnico(Tecnico tecnico) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_TECNICOS, true))) {
-            writer.write(tecnico.toCSV());
-            writer.newLine();
+    public List<String[]> carregarTecnicos() {
+        List<String[]> dadosTecnicos = new ArrayList<>();
+        tecnicos.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String linha = reader.readLine(); // Ignora o cabeçalho
+            while ((linha = reader.readLine()) != null) {
+                Tecnico tecnico = Tecnico.fromCSV(linha);
+                tecnicos.add(tecnico);
+                dadosTecnicos.add(new String[]{String.valueOf(tecnico.getId()), tecnico.getNome(), tecnico.getEspecialidade()});
+            }
         } catch (IOException e) {
-            System.err.println("Erro ao adicionar técnico ao arquivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return dadosTecnicos;
+    }
+
+    private void salvarTecnicos() {
+        synchronized (tecnicos) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+                writer.write("id,nome,especialidade");
+                writer.newLine();
+                for (Tecnico tecnico : tecnicos) {
+                    writer.write(tecnico.toCSV());
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void cadastrarTecnico(String nome, String especialidade) {
+        synchronized (tecnicos) {
+            Tecnico novoTecnico = new Tecnico(nextId, nome, especialidade);
+            tecnicos.add(novoTecnico);
+            nextId++;
+            salvarTecnicos();
         }
     }
 
     public List<Tecnico> listarTecnicos() {
-        List<Tecnico> tecnicos = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_TECNICOS))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Tecnico tecnico = Tecnico.fromCSV(linha);
-                tecnicos.add(tecnico);
+        return new ArrayList<>(tecnicos);
+    }
+
+    public Tecnico buscarTecnicoPorId(int id) {
+        return tecnicos.stream()
+                .filter(tecnico -> tecnico.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean excluirTecnico(int id) {
+        synchronized (tecnicos) {
+            boolean removed = tecnicos.removeIf(tecnico -> tecnico.getId() == id);
+            if (removed) {
+                salvarTecnicos();
+                // Aqui, talvez você queira recalcular o nextId se necessário.
             }
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo de técnicos: " + e.getMessage());
+            return removed;
         }
-        return tecnicos;
+    }
+
+    public boolean editarTecnico(int id, String novoNome, String novaEspecialidade) {
+        for (Tecnico tecnico : tecnicos) {
+            if (tecnico.getId() == id) {
+                tecnico.setNome(novoNome);
+                tecnico.setEspecialidade(novaEspecialidade);
+                salvarTecnicos();
+                return true;
+            }
+        }
+        return false;
     }
 }

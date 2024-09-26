@@ -4,21 +4,49 @@
  */
 package com.mycompany.predium.view;
 
+import com.mycompany.predium.controller.TecnicoController;
 import com.mycompany.predium.utils.WindowUtils;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author MarquesV
  */
 public class NovoTecnicoJDialog extends javax.swing.JDialog {
+    
+    private  TecnicoController tecnicoController;
 
     /**
      * Creates new form NovoTecnicoJDialog
      */
-    public NovoTecnicoJDialog(java.awt.Frame parent, boolean modal) {
+    public NovoTecnicoJDialog(java.awt.Frame parent, boolean modal, TecnicoController tecnicoController) {
         super(parent, modal);
         initComponents();
+        
+        setTabFocus(nomeJTextArea);
+        setTabFocus(especialidadeJTextArea);
+        
         WindowUtils.centralizarTela(this);
+        this.tecnicoController = tecnicoController;
+    }
+    
+        private void setTabFocus(JComponent component) {
+        component.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                    e.consume(); // Evita que a tabulação padrão ocorra
+                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
+                    if (next != null) {
+                        next.requestFocus(); // Move o foco para o próximo componente
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -33,18 +61,19 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        localJTextArea = new javax.swing.JTextArea();
+        nomeJTextArea = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         cancelarJButton = new javax.swing.JButton();
         registrarTecnicoJButton = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        localJTextArea1 = new javax.swing.JTextArea();
+        especialidadeJTextArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Novo Técnico - Predium");
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(187, 187, 187));
+        jPanel1.setBackground(new java.awt.Color(245, 245, 245));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -53,12 +82,14 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        localJTextArea.setBackground(new java.awt.Color(255, 255, 255));
-        localJTextArea.setColumns(20);
-        localJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        localJTextArea.setRows(1);
-        localJTextArea.setToolTipText("");
-        jScrollPane2.setViewportView(localJTextArea);
+        nomeJTextArea.setBackground(new java.awt.Color(255, 255, 255));
+        nomeJTextArea.setColumns(20);
+        nomeJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nomeJTextArea.setRows(1);
+        nomeJTextArea.setToolTipText("");
+        nomeJTextArea.setFocusTraversalPolicyProvider(true);
+        nomeJTextArea.setNextFocusableComponent(especialidadeJTextArea);
+        jScrollPane2.setViewportView(nomeJTextArea);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -68,6 +99,8 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         cancelarJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         cancelarJButton.setForeground(new java.awt.Color(0, 0, 0));
         cancelarJButton.setText("Cancelar");
+        cancelarJButton.setFocusTraversalPolicyProvider(true);
+        cancelarJButton.setNextFocusableComponent(nomeJTextArea);
         cancelarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarJButtonActionPerformed(evt);
@@ -78,6 +111,8 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         registrarTecnicoJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         registrarTecnicoJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarTecnicoJButton.setText("Registrar Técnico");
+        registrarTecnicoJButton.setFocusTraversalPolicyProvider(true);
+        registrarTecnicoJButton.setNextFocusableComponent(cancelarJButton);
         registrarTecnicoJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarTecnicoJButtonActionPerformed(evt);
@@ -87,12 +122,14 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        localJTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        localJTextArea1.setColumns(20);
-        localJTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        localJTextArea1.setRows(1);
-        localJTextArea1.setToolTipText("");
-        jScrollPane3.setViewportView(localJTextArea1);
+        especialidadeJTextArea.setBackground(new java.awt.Color(255, 255, 255));
+        especialidadeJTextArea.setColumns(20);
+        especialidadeJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        especialidadeJTextArea.setRows(1);
+        especialidadeJTextArea.setToolTipText("");
+        especialidadeJTextArea.setFocusTraversalPolicyProvider(true);
+        especialidadeJTextArea.setNextFocusableComponent(registrarTecnicoJButton);
+        jScrollPane3.setViewportView(especialidadeJTextArea);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -159,7 +196,20 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
 
     private void registrarTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarTecnicoJButtonActionPerformed
         // TODO add your handling code here:
+        // Recupera os dados da interface
+        String nome = nomeJTextArea.getText();
+        String especialidade = especialidadeJTextArea.getText();
+        
+        if (!nome.isEmpty() && !especialidade.isEmpty()) {
+            tecnicoController.cadastrarTecnico(nome, especialidade);
+            JOptionPane.showMessageDialog(this, "Técnico cadastrado com sucesso!");
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
 
+        // Fecha o dialog após o registro
+        this.dispose();
 
     }//GEN-LAST:event_registrarTecnicoJButtonActionPerformed
 
@@ -189,11 +239,12 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(NovoTecnicoJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        TecnicoController tecnicoController = new TecnicoController();
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NovoTecnicoJDialog dialog = new NovoTecnicoJDialog(new javax.swing.JFrame(), true);
+                NovoTecnicoJDialog dialog = new NovoTecnicoJDialog(new javax.swing.JFrame(), true, tecnicoController);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -207,14 +258,14 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarJButton;
+    private javax.swing.JTextArea especialidadeJTextArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea localJTextArea;
-    private javax.swing.JTextArea localJTextArea1;
+    private javax.swing.JTextArea nomeJTextArea;
     private javax.swing.JButton registrarTecnicoJButton;
     // End of variables declaration//GEN-END:variables
 }

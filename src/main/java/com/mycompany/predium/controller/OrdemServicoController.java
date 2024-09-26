@@ -8,7 +8,6 @@ package com.mycompany.predium.controller;
  *
  * @author MarquesV
  */
-
 import com.mycompany.predium.model.OrdemServico;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -48,18 +47,27 @@ public class OrdemServicoController {
         try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_ORDENS))) {
             String linha;
             int maiorId = 0;
+            boolean primeiraLinha = true; // Flag para ignorar o cabeçalho
             while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Ignora o cabeçalho
+                    continue;
+                }
+
                 String[] dados = linha.split(",");
-                int id = Integer.parseInt(dados[0]);
-                if (id > maiorId) {
-                    maiorId = id;
+                // Verifica se o primeiro dado (ID) é numérico antes de tentar converter
+                try {
+                    int id = Integer.parseInt(dados[0]);
+                    if (id > maiorId) {
+                        maiorId = id;
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Erro ao processar ID no arquivo de ordens: " + dados[0]);
                 }
             }
             contadorId = maiorId + 1; // O próximo ID será o maior ID + 1
         } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de ordens: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.err.println("Erro ao processar ID no arquivo de ordens: " + e.getMessage());
         }
     }
 
@@ -76,7 +84,12 @@ public class OrdemServicoController {
         List<OrdemServico> ordens = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_ORDENS))) {
             String linha;
+            boolean primeiraLinha = true; // Flag para ignorar o cabeçalho
             while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Ignora o cabeçalho
+                    continue;
+                }
                 OrdemServico ordem = OrdemServico.fromCSV(linha);
                 ordens.add(ordem);
             }
@@ -90,7 +103,12 @@ public class OrdemServicoController {
         List<String[]> ordensList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(ARQUIVO_ORDENS))) {
             String linha;
+            boolean primeiraLinha = true; // Flag para ignorar o cabeçalho
             while ((linha = br.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Ignora o cabeçalho
+                    continue;
+                }
                 String[] dados = linha.split(",");
                 ordensList.add(dados);  // Adiciona o array de strings com os dados da linha
             }

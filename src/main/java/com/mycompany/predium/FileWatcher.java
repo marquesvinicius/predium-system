@@ -9,7 +9,10 @@ package com.mycompany.predium;
  * @author MarquesV
  */
 import com.mycompany.predium.controller.LoginHandler;
+import com.mycompany.predium.controller.TecnicoController;
+import com.mycompany.predium.model.Tecnico;
 import com.mycompany.predium.model.Usuario;
+import com.mycompany.predium.view.GerenciarTecnicosJFrame;
 import com.mycompany.predium.view.PrincipalJFrame;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,7 +28,9 @@ public class FileWatcher extends Thread {
 
     private final Path path;
     private final PrincipalJFrame principalFrame;
+    private final GerenciarTecnicosJFrame gerenciarTecnicosFrame;
     private final LoginHandler loginHandler;
+    private final TecnicoController tecnicoController;
     private final Set<String> usuariosExistentes = new HashSet<>(); 
 
     // Construtor para ordens de serviço
@@ -33,6 +38,8 @@ public class FileWatcher extends Thread {
         this.path = path;
         this.principalFrame = principalFrame;
         this.loginHandler = loginHandler;
+        this.gerenciarTecnicosFrame = null; // Não usado nesse caso
+        this.tecnicoController = null;
     }
 
     // Construtor para usuários
@@ -40,6 +47,17 @@ public class FileWatcher extends Thread {
         this.path = path;
         this.principalFrame = null; // Não precisa de PrincipalJFrame
         this.loginHandler = loginHandler;
+        this.gerenciarTecnicosFrame = null;
+        this.tecnicoController = null;
+    }
+    
+    // Construtor para técnicos
+    public FileWatcher(Path path, GerenciarTecnicosJFrame gerenciarTecnicosFrame, TecnicoController tecnicoController) {
+        this.path = path;
+        this.gerenciarTecnicosFrame = gerenciarTecnicosFrame;
+        this.tecnicoController = tecnicoController;
+        this.principalFrame = null;
+        this.loginHandler = null;
     }
 
     @Override
@@ -72,6 +90,11 @@ public class FileWatcher extends Thread {
                         // Atualiza a tabela se PrincipalJFrame não for nulo
                         if (principalFrame != null) {
                             principalFrame.atualizarTabela();
+                        }
+
+                        // Atualiza a tabela de técnicos se GerenciarTecnicosJFrame não for nulo
+                        if (gerenciarTecnicosFrame != null) {
+                            gerenciarTecnicosFrame.atualizarTabelaTecnicos();
                         }
                     }
                 }

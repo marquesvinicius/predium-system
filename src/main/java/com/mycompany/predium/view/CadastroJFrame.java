@@ -95,7 +95,7 @@ public class CadastroJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         mainJPanel = new javax.swing.JPanel();
-        loginJPanel = new javax.swing.JPanel();
+        cadastroJPanel = new javax.swing.JPanel();
         loginTitleJLabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         usernameJLabel = new javax.swing.JLabel();
@@ -114,7 +114,7 @@ public class CadastroJFrame extends javax.swing.JFrame {
 
         mainJPanel.setBackground(new java.awt.Color(245, 245, 245));
 
-        loginJPanel.setBackground(new java.awt.Color(121, 203, 180));
+        cadastroJPanel.setBackground(new java.awt.Color(121, 203, 180));
 
         loginTitleJLabel.setBackground(new java.awt.Color(37, 57, 71));
         loginTitleJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -183,15 +183,15 @@ public class CadastroJFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout loginJPanelLayout = new javax.swing.GroupLayout(loginJPanel);
-        loginJPanel.setLayout(loginJPanelLayout);
-        loginJPanelLayout.setHorizontalGroup(
-            loginJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginJPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout cadastroJPanelLayout = new javax.swing.GroupLayout(cadastroJPanel);
+        cadastroJPanel.setLayout(cadastroJPanelLayout);
+        cadastroJPanelLayout.setHorizontalGroup(
+            cadastroJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cadastroJPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(loginJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(cadastroJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(senhaJLabel)
-                    .addGroup(loginJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(cadastroJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPasswordField)
                         .addComponent(loginTitleJLabel)
                         .addComponent(usernameJLabel)
@@ -202,9 +202,9 @@ public class CadastroJFrame extends javax.swing.JFrame {
                         .addComponent(confirmPasswordField)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
-        loginJPanelLayout.setVerticalGroup(
-            loginJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginJPanelLayout.createSequentialGroup()
+        cadastroJPanelLayout.setVerticalGroup(
+            cadastroJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cadastroJPanelLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(loginTitleJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -236,7 +236,7 @@ public class CadastroJFrame extends javax.swing.JFrame {
             mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainJPanelLayout.createSequentialGroup()
                 .addContainerGap(73, Short.MAX_VALUE)
-                .addComponent(loginJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cadastroJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addComponent(imgLogoJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
@@ -247,7 +247,7 @@ public class CadastroJFrame extends javax.swing.JFrame {
                 .addGroup(mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainJPanelLayout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(loginJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cadastroJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(mainJPanelLayout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addComponent(imgLogoJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -346,11 +346,11 @@ public class CadastroJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel cadastroJPanel;
     private javax.swing.JPasswordField confirmPasswordField;
     private javax.swing.JLabel imgLogoJLabel;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JPanel loginJPanel;
     private javax.swing.JLabel loginTitleJLabel;
     private javax.swing.JPanel mainJPanel;
     private javax.swing.JButton registrarJButton;

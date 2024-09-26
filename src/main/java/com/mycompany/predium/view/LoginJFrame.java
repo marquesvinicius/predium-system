@@ -36,8 +36,6 @@ public class LoginJFrame extends javax.swing.JFrame {
 
         setTabFocus(usernameJTextArea);
         setTabFocus(jPasswordField);
-        setTabFocus(entrarJButton);
-        setTabFocus(registrarJButton);
 
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, loginHandler).start(); // Inicia o monitoramento do arquivo de usuários
@@ -138,6 +136,8 @@ public class LoginJFrame extends javax.swing.JFrame {
             }
         });
 
+        jSeparator3.setRequestFocusEnabled(false);
+
         cadastreJLabel.setBackground(new java.awt.Color(37, 57, 71));
         cadastreJLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cadastreJLabel.setForeground(new java.awt.Color(37, 57, 71));
@@ -148,7 +148,9 @@ public class LoginJFrame extends javax.swing.JFrame {
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("CADASTRAR");
+        registrarJButton.setFocusTraversalPolicy(null);
         registrarJButton.setFocusTraversalPolicyProvider(true);
+        registrarJButton.setNextFocusableComponent(usernameJTextArea);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarJButtonActionPerformed(evt);

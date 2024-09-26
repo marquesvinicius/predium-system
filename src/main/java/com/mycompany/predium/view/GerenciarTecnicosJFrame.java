@@ -4,8 +4,19 @@
  */
 package com.mycompany.predium.view;
 
+import com.mycompany.predium.FileWatcher;
+import com.mycompany.predium.controller.TecnicoController;
+import com.mycompany.predium.model.Tecnico;
 import com.mycompany.predium.utils.TableUtils;
 import com.mycompany.predium.utils.WindowUtils;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,14 +24,56 @@ import com.mycompany.predium.utils.WindowUtils;
  */
 public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form GerenciarTecnicosJFrame
-     */
+    private TecnicoController tecnicoController;
+
     public GerenciarTecnicosJFrame() {
         initComponents();
         TableUtils.configureNonEditableTable(tecnicosjTable);
         WindowUtils.centralizarTela(this);
+        tecnicoController = new TecnicoController();
 
+        carregarTecnicosParaTabela();
+
+        Path path = Paths.get("src/main/resources/db");
+        new FileWatcher(path, this, tecnicoController).start();
+    }
+
+    private void carregarTecnicosParaTabela() {
+        List<String[]> tecnicos = tecnicoController.carregarTecnicos();
+
+        // Define as colunas da tabela
+        String[] colunas = {"ID", "Nome", "Especialidade"};
+
+        // Cria o modelo da tabela
+        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
+
+        // Adiciona cada técnico na tabela
+        for (String[] tecnico : tecnicos) {
+            tableModel.addRow(tecnico);
+        }
+
+        // Vincula o modelo à JTable
+        tecnicosjTable.setModel(tableModel);
+    }
+
+    public void atualizarTabelaTecnicos() {
+        DefaultTableModel model = (DefaultTableModel) tecnicosjTable.getModel();
+        model.setRowCount(0); // Limpa todas as linhas atuais
+
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/db/tecnicos.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; // Flag para ignorar a primeira linha (cabeçalho)
+            while ((linha = br.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Ignora o cabeçalho
+                    continue;
+                }
+                String[] dados = linha.split(",");
+                model.addRow(dados);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao ler o arquivo de técnicos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -45,7 +98,7 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
         setTitle("Gerenciar Técnicos - Predium");
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(187, 187, 187));
+        jPanel1.setBackground(new java.awt.Color(245, 245, 245));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -178,16 +231,44 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
 
     private void novoTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoTecnicoJButtonActionPerformed
         // TODO add your handling code here:
-        NovoTecnicoJDialog dialog = new NovoTecnicoJDialog(this, true);
+        NovoTecnicoJDialog dialog = new NovoTecnicoJDialog(this, true, tecnicoController);
         dialog.setVisible(true);
+        atualizarTabelaTecnicos();
     }//GEN-LAST:event_novoTecnicoJButtonActionPerformed
 
     private void excluirTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirTecnicoJButtonActionPerformed
         // TODO add your handling code here:
+        int selectedRow = tecnicosjTable.getSelectedRow();
+        if (selectedRow != -1) {
+            int id = Integer.parseInt(tecnicosjTable.getValueAt(selectedRow, 0).toString());
+            int option = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir este técnico?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                if (tecnicoController.excluirTecnico(id)) {
+                    atualizarTabelaTecnicos();
+                    JOptionPane.showMessageDialog(this, "Técnico excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao excluir o técnico.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um técnico para excluir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_excluirTecnicoJButtonActionPerformed
 
     private void editarTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarTecnicoJButtonActionPerformed
         // TODO add your handling code here:
+//        int selectedRow = tecnicosjTable.getSelectedRow();
+//        if (selectedRow != -1) {
+//            int id = Integer.parseInt(tecnicosjTable.getValueAt(selectedRow, 0).toString());
+//            String nome = tecnicosjTable.getValueAt(selectedRow, 1).toString();
+//            String especialidade = tecnicosjTable.getValueAt(selectedRow, 2).toString();
+//            
+//            EditarTecnicoJDialog dialog = new EditarTecnicoJDialog(this, true, tecnicoController, id, nome, especialidade);
+//            dialog.setVisible(true);
+//            atualizarTabela();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Por favor, selecione um técnico para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_editarTecnicoJButtonActionPerformed
 
     /**

@@ -58,17 +58,22 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         TableUtils.configureNonEditableTable(ordensjTable);
     }
 
-    private void carregarOrdensParaTabela() {
+    private void carregarOrdensParaTabela() { 
         List<String[]> ordens = ordemController.carregarOrdensServico();
 
         // Define as colunas da tabela
-        String[] colunas = {"ID", "Descrição", "Local", "Data", "Prioridade", "Status", "Técnico"};
+        String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
 
         // Cria o modelo da tabela
         DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
 
-        // Adiciona cada ordem de serviço na tabela
+        // Adiciona cada ordem de serviço na tabela, ignorando a primeira linha (cabeçalho)
+        boolean primeiraLinha = true;
         for (String[] ordem : ordens) {
+            if (primeiraLinha) {
+                primeiraLinha = false; // Ignora o cabeçalho
+                continue;
+            }
             tableModel.addRow(ordem);
         }
 
@@ -82,7 +87,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/db/ordens.csv"))) {
             String linha;
+            boolean primeiraLinha = true; // Flag para ignorar a primeira linha (cabeçalho)
             while ((linha = br.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Ignora o cabeçalho
+                    continue;
+                }
                 String[] dados = linha.split(",");
                 model.addRow(dados);
             }
@@ -106,6 +116,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         // Escreve os dados atualizados no arquivo CSV
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/db/ordens.csv"))) {
+            // Adiciona o cabeçalho ao arquivo CSV
+            bw.write("ID,Descrição,Local,Data de Entrada,Prioridade,Status,Técnico");
+            bw.newLine();
+            
+            // Escreve os dados das ordens
             for (String[] linha : dados) {
                 bw.write(String.join(",", linha));
                 bw.newLine();
@@ -114,6 +129,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar o arquivo CSV.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -265,7 +281,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jLabel2.setText("Utilize o menu acima para acessar as funções");
 
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("ou confira os itens abaixo:");
+        jLabel3.setText("ou selecione entre os itens abaixo:");
 
         ordensjTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -299,6 +315,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        ordensjTable.setFocusable(false);
         ordensjTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         ordensjTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         ordensjTable.getTableHeader().setResizingAllowed(false);
