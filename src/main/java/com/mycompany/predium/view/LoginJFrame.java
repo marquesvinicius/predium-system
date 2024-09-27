@@ -12,15 +12,13 @@ import com.mycompany.predium.controller.CadastroHandler;
  */
 import com.mycompany.predium.controller.LoginHandler;
 import com.mycompany.predium.model.Usuario;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.PlaceholderField;
 import com.mycompany.predium.utils.WindowUtils;
-import java.awt.Component;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import javax.swing.JComponent;
 
 public class LoginJFrame extends javax.swing.JFrame {
 
@@ -34,26 +32,15 @@ public class LoginJFrame extends javax.swing.JFrame {
         this.cadastroHandler = cadastroHandler;
         loginHandler = new LoginHandler(cadastroHandler.getUsuarios());
 
-        setTabFocus(usernameJTextArea);
-        setTabFocus(jPasswordField);
+        KeyboardUtils.setTabFocus(usernameJTextArea);
+        KeyboardUtils.setTabFocus(jPasswordField);
+        KeyboardUtils.setTabFocus(entrarJButton);
+        KeyboardUtils.setTabFocus(registrarJButton);
+        WindowUtils.configurarEnterParaBotao(entrarJButton);
+        WindowUtils.configurarEnterParaBotao(registrarJButton);
 
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, loginHandler).start(); // Inicia o monitoramento do arquivo de usuários
-    }
-    
-        private void setTabFocus(JComponent component) {
-        component.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                    e.consume(); // Evita que a tabulação padrão ocorra
-                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
-                    if (next != null) {
-                        next.requestFocus(); // Move o foco para o próximo componente
-                    }
-                }
-            }
-        });
     }
 
     public LoginHandler getLoginHandler() {
@@ -105,6 +92,7 @@ public class LoginJFrame extends javax.swing.JFrame {
 
         loginJPanel.setBackground(new java.awt.Color(121, 203, 180));
         loginJPanel.setFocusable(false);
+        loginJPanel.setRequestFocusEnabled(false);
 
         loginTitleJLabel.setBackground(new java.awt.Color(37, 57, 71));
         loginTitleJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -148,7 +136,6 @@ public class LoginJFrame extends javax.swing.JFrame {
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("CADASTRAR");
-        registrarJButton.setFocusTraversalPolicy(null);
         registrarJButton.setFocusTraversalPolicyProvider(true);
         registrarJButton.setNextFocusableComponent(usernameJTextArea);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -233,6 +220,7 @@ public class LoginJFrame extends javax.swing.JFrame {
         imgLogoJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/predium-logo+text.png"))); // NOI18N
         imgLogoJLabel.setText("jLabel6");
         imgLogoJLabel.setFocusable(false);
+        imgLogoJLabel.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout mainJPanelLayout = new javax.swing.GroupLayout(mainJPanel);
         mainJPanel.setLayout(mainJPanelLayout);

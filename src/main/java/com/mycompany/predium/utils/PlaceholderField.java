@@ -25,7 +25,7 @@ public class PlaceholderField {
 
         // Configura o placeholder para ser visível inicialmente
         passwordField.setEchoChar((char) 0); // Exibe o texto normal ao invés de asteriscos
-        passwordField.setText("*****");
+        passwordField.setText("********");
 
         // Adiciona o FocusListener
         passwordField.addFocusListener(new FocusListener() {
@@ -43,7 +43,7 @@ public class PlaceholderField {
             public void focusLost(FocusEvent e) {
                 // Caso o campo fique vazio após perder o foco, redefine o placeholder
                 if (new String(passwordField.getPassword()).isEmpty()) {
-                    passwordField.setText("*****");
+                    passwordField.setText("********");
                     passwordField.setEchoChar((char) 0); // Mostra o texto normal
                     firstClickPassword = true; // Permite a redefinição no próximo clique
                 }

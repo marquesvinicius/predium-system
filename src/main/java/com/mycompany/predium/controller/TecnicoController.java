@@ -115,15 +115,31 @@ public class TecnicoController {
         }
     }
 
-    public boolean editarTecnico(int id, String novoNome, String novaEspecialidade) {
+    public boolean editarTecnico(int id, String campo, String novoValor) {
         for (Tecnico tecnico : tecnicos) {
             if (tecnico.getId() == id) {
-                tecnico.setNome(novoNome);
-                tecnico.setEspecialidade(novaEspecialidade);
-                salvarTecnicos();
-                return true;
+                if (campo.equals("Nome")) {
+                    tecnico.setNome(novoValor);
+                } else if (campo.equals("Especialidade")) {
+                    tecnico.setEspecialidade(novoValor);
+                }
+                salvarTecnicos(); // Salva a lista de técnicos no CSV
+                return true; // Técnico atualizado com sucesso
             }
         }
-        return false;
+        return false; // Técnico não encontrado
     }
+
+//    private boolean salvarTecnicos2(List<Tecnico> tecnicos) {
+//    try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/db/tecnicos.csv"))) {
+//        for (Tecnico tecnico : tecnicos) {
+//            writer.write(tecnico.toCSV());
+//            writer.newLine();
+//        }
+//        return true;
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//        return false;
+//    }
+//}
 }

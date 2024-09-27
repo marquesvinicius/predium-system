@@ -4,7 +4,11 @@
  */
 package com.mycompany.predium.view;
 
+import com.mycompany.predium.controller.TecnicoController;
+import com.mycompany.predium.model.Tecnico;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.WindowUtils;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,14 +16,32 @@ import com.mycompany.predium.utils.WindowUtils;
  */
 public class EditarTecnicoJDialog extends javax.swing.JDialog {
 
+    private static int tecnicoId;
+
     /**
      * Creates new form EditarTecnicoJDialog
      */
-    public EditarTecnicoJDialog(java.awt.Frame parent, boolean modal) {
+    public EditarTecnicoJDialog(java.awt.Frame parent, boolean modal, int tecnicoId) {
         super(parent, modal);
         initComponents();
         WindowUtils.centralizarTela(this);
+        this.tecnicoId = tecnicoId;
+        carregarDadosTecnico(tecnicoId);
+        
+        KeyboardUtils.setTabFocus(novoValorTextArea);
+        WindowUtils.configurarEnterParaBotao(editarJButton);
 
+    }
+
+    public void carregarDadosTecnico(int id) {
+        // Carregar dados do técnico a partir do CSV usando o ID
+        TecnicoController controller = new TecnicoController();
+        Tecnico tecnico = controller.buscarTecnicoPorId(id);
+
+        if (tecnico != null) {
+            tecnicoSelecionadoJLabel.setText("Técnico Selecionado: {ID: " + tecnico.getId() + "}");
+            // Aqui poderíamos preencher o campo com o valor atual do técnico para edição, se necessário.
+        }
     }
 
     /**
@@ -32,29 +54,30 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        campoAEditarJLabel = new javax.swing.JLabel();
+        novoValorJLabel = new javax.swing.JLabel();
         cancelarJButton = new javax.swing.JButton();
         editarJButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        prioridadeJComboBox = new javax.swing.JComboBox<>();
+        tituloJLabel = new javax.swing.JLabel();
+        campoAEditarJComboBox = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        localJTextArea1 = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
+        novoValorTextArea = new javax.swing.JTextArea();
+        tecnicoSelecionadoJLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Editar Técnico - Predium");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(245, 245, 245));
         jPanel1.setPreferredSize(new java.awt.Dimension(804, 720));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Campo:");
+        campoAEditarJLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        campoAEditarJLabel.setForeground(new java.awt.Color(0, 0, 0));
+        campoAEditarJLabel.setText("Campo:");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Novo Valor:");
+        novoValorJLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        novoValorJLabel.setForeground(new java.awt.Color(0, 0, 0));
+        novoValorJLabel.setText("Novo Valor:");
 
         cancelarJButton.setBackground(new java.awt.Color(187, 187, 187));
         cancelarJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -70,96 +93,104 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
         editarJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         editarJButton.setForeground(new java.awt.Color(255, 255, 255));
         editarJButton.setText("Editar Técnico");
+        editarJButton.setFocusTraversalPolicyProvider(true);
+        editarJButton.setNextFocusableComponent(cancelarJButton);
         editarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarJButtonActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Editar Técnico");
+        tituloJLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        tituloJLabel.setForeground(new java.awt.Color(0, 0, 0));
+        tituloJLabel.setText("Editar Técnico");
 
-        prioridadeJComboBox.setBackground(new java.awt.Color(255, 255, 255));
-        prioridadeJComboBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        prioridadeJComboBox.setForeground(new java.awt.Color(0, 0, 0));
-        prioridadeJComboBox.setMaximumRowCount(3);
-        prioridadeJComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Especialidade" }));
-        prioridadeJComboBox.addActionListener(new java.awt.event.ActionListener() {
+        campoAEditarJComboBox.setBackground(new java.awt.Color(255, 255, 255));
+        campoAEditarJComboBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        campoAEditarJComboBox.setForeground(new java.awt.Color(0, 0, 0));
+        campoAEditarJComboBox.setMaximumRowCount(2);
+        campoAEditarJComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Especialidade" }));
+        campoAEditarJComboBox.setFocusTraversalPolicyProvider(true);
+        campoAEditarJComboBox.setNextFocusableComponent(novoValorTextArea);
+        campoAEditarJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prioridadeJComboBoxActionPerformed(evt);
+                campoAEditarJComboBoxActionPerformed(evt);
             }
         });
 
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        localJTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        localJTextArea1.setColumns(20);
-        localJTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        localJTextArea1.setRows(1);
-        localJTextArea1.setToolTipText("");
-        jScrollPane3.setViewportView(localJTextArea1);
+        novoValorTextArea.setBackground(new java.awt.Color(255, 255, 255));
+        novoValorTextArea.setColumns(20);
+        novoValorTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        novoValorTextArea.setRows(1);
+        novoValorTextArea.setToolTipText("");
+        novoValorTextArea.setFocusTraversalPolicyProvider(true);
+        novoValorTextArea.setNextFocusableComponent(editarJButton);
+        jScrollPane3.setViewportView(novoValorTextArea);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Técnico: ID {id-do-técnico}");
+        tecnicoSelecionadoJLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        tecnicoSelecionadoJLabel.setForeground(new java.awt.Color(0, 0, 0));
+        tecnicoSelecionadoJLabel.setText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(106, Short.MAX_VALUE)
+                .addContainerGap(99, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
+                    .addComponent(tituloJLabel)
+                    .addComponent(tecnicoSelecionadoJLabel)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(prioridadeJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(campoAEditarJLabel)
+                                .addComponent(campoAEditarJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3)))
+                                .addComponent(novoValorJLabel)))
                         .addComponent(editarJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cancelarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(78, 78, 78))
+                .addGap(88, 88, 88))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
                 .addGap(27, 27, 27)
+                .addComponent(tituloJLabel)
+                .addGap(19, 19, 19)
+                .addComponent(tecnicoSelecionadoJLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(prioridadeJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(campoAEditarJLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campoAEditarJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
+                        .addComponent(novoValorJLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
+                .addGap(31, 31, 31)
                 .addComponent(editarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(cancelarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 807, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -171,13 +202,30 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelarJButtonActionPerformed
 
     private void editarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarJButtonActionPerformed
-        // TODO add your handling code here:
+        // Obtém o campo e o novo valor digitado
+        String campoSelecionado = campoAEditarJComboBox.getSelectedItem().toString();
+        String novoValor = novoValorTextArea.getText().trim();
+
+        if (novoValor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O valor não pode estar vazio!");
+            return;
+        }
+
+        TecnicoController controller = new TecnicoController();
+        boolean sucesso = controller.editarTecnico(tecnicoId, campoSelecionado, novoValor);
+
+        if (sucesso) {
+            JOptionPane.showMessageDialog(this, "Técnico atualizado com sucesso!");
+            this.dispose(); // Fecha a tela após sucesso
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar técnico.");
+        }
 
     }//GEN-LAST:event_editarJButtonActionPerformed
 
-    private void prioridadeJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prioridadeJComboBoxActionPerformed
+    private void campoAEditarJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoAEditarJComboBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_prioridadeJComboBoxActionPerformed
+    }//GEN-LAST:event_campoAEditarJComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,7 +257,7 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EditarTecnicoJDialog dialog = new EditarTecnicoJDialog(new javax.swing.JFrame(), true);
+                EditarTecnicoJDialog dialog = new EditarTecnicoJDialog(new javax.swing.JFrame(), true, tecnicoId);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -222,15 +270,15 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> campoAEditarJComboBox;
+    private javax.swing.JLabel campoAEditarJLabel;
     private javax.swing.JButton cancelarJButton;
     private javax.swing.JButton editarJButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea localJTextArea1;
-    private javax.swing.JComboBox<String> prioridadeJComboBox;
+    private javax.swing.JLabel novoValorJLabel;
+    private javax.swing.JTextArea novoValorTextArea;
+    private javax.swing.JLabel tecnicoSelecionadoJLabel;
+    private javax.swing.JLabel tituloJLabel;
     // End of variables declaration//GEN-END:variables
 }

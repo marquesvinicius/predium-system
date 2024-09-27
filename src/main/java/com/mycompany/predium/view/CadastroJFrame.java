@@ -7,6 +7,7 @@ package com.mycompany.predium.view;
 import com.mycompany.predium.controller.CadastroHandler;
 import com.mycompany.predium.controller.LoginHandler;
 import com.mycompany.predium.model.Usuario;
+import com.mycompany.predium.utils.KeyboardUtils;
 import javax.swing.JOptionPane;
 import com.mycompany.predium.utils.WindowUtils;
 import com.mycompany.predium.utils.PlaceholderField;
@@ -34,9 +35,10 @@ public class CadastroJFrame extends javax.swing.JFrame {
         this.loginHandler = loginHandler; // Armazena o LoginHandler
         initComponents();
         
-        setTabFocus(usernameJTextArea);
-        setTabFocus(jPasswordField);
-        setTabFocus(confirmPasswordField);
+        KeyboardUtils.setTabFocus(usernameJTextArea);
+        KeyboardUtils.setTabFocus(jPasswordField);
+        KeyboardUtils.setTabFocus(confirmPasswordField);
+        WindowUtils.configurarEnterParaBotao(registrarJButton);
         
         if (jPasswordField != null && confirmPasswordField != null) {
             new PlaceholderField(jPasswordField, "Digite sua senha");
@@ -70,20 +72,6 @@ public class CadastroJFrame extends javax.swing.JFrame {
 
     }
 
-    private void setTabFocus(JComponent component) {
-        component.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                    e.consume(); // Evita que a tabulação padrão ocorra
-                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
-                    if (next != null) {
-                        next.requestFocus(); // Move o foco para o próximo componente
-                    }
-                }
-            }
-        });
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

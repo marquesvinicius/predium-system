@@ -8,9 +8,11 @@ package com.mycompany.predium.model;
  *
  * @author MarquesV
  */
+import com.mycompany.predium.controller.TecnicoController;
 import java.time.LocalDate;
 
 public class OrdemServico {
+
     private int id;
     private String descricao;
     private String local;
@@ -18,18 +20,18 @@ public class OrdemServico {
     private String prioridade;
     private String status;
     private Tecnico tecnicoResponsavel;
-    
+
     public OrdemServico(int id, String descricao, String local, String prioridade) {
         this.id = id;
         this.descricao = descricao;
         this.local = local;
         this.data = LocalDate.now();  // A data de criação da ordem é a data atual
         this.prioridade = prioridade;
-        this.status = "Aberta";  // Inicialmente, a ordem começa com o status 'Aberta'
+        this.status = "Aberta";  // Inicialmente, a ordem começa com o status 'Aberto'
     }
-    
-    public OrdemServico(){
-        
+
+    public OrdemServico() {
+
     }
 
     public void setId(int id) {
@@ -56,11 +58,11 @@ public class OrdemServico {
         this.status = status;
     }
 
-    public void setTecnicoResponsavel(Tecnico tecnicoResponsavel) {
+    public void setTecnico(Tecnico tecnicoResponsavel) {
         this.tecnicoResponsavel = tecnicoResponsavel;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -84,7 +86,7 @@ public class OrdemServico {
         return status;
     }
 
-    public Tecnico getTecnicoResponsavel() {
+    public Tecnico getTecnico() {
         return tecnicoResponsavel;
     }
 
@@ -98,41 +100,37 @@ public class OrdemServico {
 
     @Override
     public String toString() {
-        return "OrdemServico{" +
-               "id=" + id +
-               ", descricao='" + descricao + '\'' +
-               ", local='" + local + '\'' +
-               ", data=" + data +
-               ", prioridade='" + prioridade + '\'' +
-               ", status='" + status + '\'' +
-               ", tecnicoResponsavel=" + (tecnicoResponsavel != null ? tecnicoResponsavel.getNome() : "Não atribuído") +
-               '}';
+        return "OrdemServico{"
+                + "id=" + id
+                + ", descricao='" + descricao + '\''
+                + ", local='" + local + '\''
+                + ", data=" + data
+                + ", prioridade='" + prioridade + '\''
+                + ", status='" + status + '\''
+                + ", tecnicoResponsavel=" + (tecnicoResponsavel != null ? tecnicoResponsavel.getNome() : "Não atribuído")
+                + '}';
     }
-    
-        public String toCSV() {
-            String tecnicoId = (tecnicoResponsavel != null) ? String.valueOf(tecnicoResponsavel.getId()) : "null";
-            return id + "," + descricao + "," + local + "," + data + "," + prioridade + "," + status + "," + tecnicoId;
-        }
-    
-     public static OrdemServico fromCSV(String csv) {
-        String[] partes = csv.split(",");
-        int id = Integer.parseInt(partes[0]);
-        String descricao = partes[1];
-        String local = partes[2];
-        LocalDate data = LocalDate.parse(partes[3]);
-        String prioridade = partes[4];
-        String status = partes[5];
-        int tecnicoId = Integer.parseInt(partes[6]);
 
-        // Criar o objeto OrdemServico e retornar
+    public String toCSV() {
+        String tecnicoId = (tecnicoResponsavel != null) ? String.valueOf(tecnicoResponsavel.getId()) : "null";
+        return id + "," + descricao + "," + local + "," + data + "," + prioridade + "," + status + "," + tecnicoId;
+    }
+
+    public static OrdemServico fromCSV(String csv) {
+        String[] partes = csv.split(",");
         OrdemServico ordem = new OrdemServico();
-        ordem.setId(id);
-        ordem.setDescricao(descricao);
-        ordem.setLocal(local);
-        ordem.setData(data);
-        ordem.setPrioridade(prioridade);
-        ordem.setStatus(status);
-        // Aqui você precisa buscar o Técnico pelo ID, se necessário
+        ordem.setId(Integer.parseInt(partes[0]));
+        ordem.setDescricao(partes[1]);
+        ordem.setLocal(partes[2]);
+        ordem.setData(LocalDate.parse(partes[3]));
+        ordem.setPrioridade(partes[4]);
+        ordem.setStatus(partes[5]);
+
+        if (!partes[6].equals("null")) {
+            int tecnicoId = Integer.parseInt(partes[6]);
+            ordem.setTecnico(new TecnicoController().buscarTecnicoPorId(tecnicoId));
+        }
+
         return ordem;
     }
 }

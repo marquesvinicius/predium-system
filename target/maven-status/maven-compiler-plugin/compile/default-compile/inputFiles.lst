@@ -3,7 +3,9 @@ C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\GerenciarTecnicosJFrame.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\RegistrarOrdemJDialog.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\controller\TecnicoController.java
+C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\utils\KeyboardUtils.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\controller\LoginHandler.java
+C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\AtualizarStatusJDialog.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\model\OrdemServico.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\controller\CadastroHandler.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\utils\WindowUtils.java
@@ -11,9 +13,11 @@ C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\utils\PlaceholderField.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\EditarTecnicoJDialog.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\FileWatcher.java
+C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\AtribuirTecnicosJDialog.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\utils\TableUtils.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\Predium.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\NovoTecnicoJDialog.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\model\Usuario.java
+C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\utils\LoginFocusTraversalPolicy.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\view\PrincipalJFrame.java
 C:\Users\MarquesV\OneDrive\Documentos\NetBeansProjects\predium\src\main\java\com\mycompany\predium\model\Tecnico.java

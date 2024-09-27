@@ -132,6 +132,10 @@
                 <Property name="rows" type="int" value="1"/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="autoscrolls" type="boolean" value="false"/>
+                <Property name="focusTraversalPolicyProvider" type="boolean" value="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="localJTextArea"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -169,6 +173,10 @@
                 </Property>
                 <Property name="rows" type="int" value="1"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="focusTraversalPolicyProvider" type="boolean" value="true"/>
+                <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="prioridadeJComboBox"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -203,6 +211,10 @@
                 <StringItem index="2" value="Alta"/>
               </StringArray>
             </Property>
+            <Property name="focusTraversalPolicyProvider" type="boolean" value="true"/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="registrarJButton"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prioridadeJComboBoxActionPerformed"/>
@@ -223,6 +235,9 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="descricaoJTextArea"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelarJButtonActionPerformed"/>
@@ -240,6 +255,10 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Registrar Ordem"/>
+            <Property name="focusTraversalPolicyProvider" type="boolean" value="true"/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="cancelarJButton"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registrarJButtonActionPerformed"/>

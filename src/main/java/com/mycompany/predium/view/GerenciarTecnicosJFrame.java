@@ -28,14 +28,16 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
 
     public GerenciarTecnicosJFrame() {
         initComponents();
-        TableUtils.configureNonEditableTable(tecnicosjTable);
-        WindowUtils.centralizarTela(this);
+
         tecnicoController = new TecnicoController();
 
         carregarTecnicosParaTabela();
 
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, this, tecnicoController).start();
+
+        TableUtils.configureNonEditableTable(tecnicosjTable);
+        WindowUtils.centralizarTela(this);
     }
 
     private void carregarTecnicosParaTabela() {
@@ -257,18 +259,19 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
 
     private void editarTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarTecnicoJButtonActionPerformed
         // TODO add your handling code here:
-//        int selectedRow = tecnicosjTable.getSelectedRow();
-//        if (selectedRow != -1) {
-//            int id = Integer.parseInt(tecnicosjTable.getValueAt(selectedRow, 0).toString());
-//            String nome = tecnicosjTable.getValueAt(selectedRow, 1).toString();
-//            String especialidade = tecnicosjTable.getValueAt(selectedRow, 2).toString();
-//            
-//            EditarTecnicoJDialog dialog = new EditarTecnicoJDialog(this, true, tecnicoController, id, nome, especialidade);
-//            dialog.setVisible(true);
-//            atualizarTabela();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Por favor, selecione um técnico para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-//        }
+        int selectedRow = tecnicosjTable.getSelectedRow(); // Captura a linha selecionada
+        if (selectedRow != -1) { // Verifica se alguma linha foi selecionada
+            int id = Integer.parseInt(tecnicosjTable.getValueAt(selectedRow, 0).toString()); // Obtém o valor da primeira coluna (ID) e converte para int
+            String nome = tecnicosjTable.getValueAt(selectedRow, 1).toString(); // Obtém o nome do técnico
+            String especialidade = tecnicosjTable.getValueAt(selectedRow, 2).toString(); // Obtém a especialidade do técnico
+
+            // Agora você pode passar essas informações para o próximo JDialog, por exemplo:
+            EditarTecnicoJDialog dialog = new EditarTecnicoJDialog(this, true, id);
+            dialog.setVisible(true);
+            atualizarTabelaTecnicos(); // Atualiza a tabela após a edição
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um técnico para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_editarTecnicoJButtonActionPerformed
 
     /**

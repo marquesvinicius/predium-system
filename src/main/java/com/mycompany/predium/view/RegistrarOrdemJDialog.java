@@ -6,6 +6,7 @@ package com.mycompany.predium.view;
 
 import com.mycompany.predium.model.OrdemServico;
 import com.mycompany.predium.controller.OrdemServicoController;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.PlaceholderField;
 import com.mycompany.predium.utils.WindowUtils;
 import javax.swing.JLabel;
@@ -30,6 +31,10 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         new PlaceholderField(descricaoJTextArea, "Ex: Consertar vazamento; Trocar lâmpadas; Pintura de paredes; Manutenção de ar-condicionado; Limpeza de caixa d'água, etc.");
         new PlaceholderField(localJTextArea, "Ex: Apto. 123");
         WindowUtils.centralizarTela(this);
+        KeyboardUtils.setTabFocus(descricaoJTextArea);
+        KeyboardUtils.setTabFocus(localJTextArea);
+        WindowUtils.configurarEnterParaBotao(registrarJButton);
+        WindowUtils.configurarEnterParaBotao(cancelarJButton);
     }
 
     /**
@@ -70,6 +75,8 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         descricaoJTextArea.setRows(1);
         descricaoJTextArea.setWrapStyleWord(true);
         descricaoJTextArea.setAutoscrolls(false);
+        descricaoJTextArea.setFocusTraversalPolicyProvider(true);
+        descricaoJTextArea.setNextFocusableComponent(localJTextArea);
         jScrollPane1.setViewportView(descricaoJTextArea);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -84,6 +91,8 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         localJTextArea.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         localJTextArea.setRows(1);
         localJTextArea.setToolTipText("");
+        localJTextArea.setFocusTraversalPolicyProvider(true);
+        localJTextArea.setNextFocusableComponent(prioridadeJComboBox);
         jScrollPane2.setViewportView(localJTextArea);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -95,6 +104,8 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         prioridadeJComboBox.setForeground(new java.awt.Color(0, 0, 0));
         prioridadeJComboBox.setMaximumRowCount(3);
         prioridadeJComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Baixa", "Média", "Alta" }));
+        prioridadeJComboBox.setFocusTraversalPolicyProvider(true);
+        prioridadeJComboBox.setNextFocusableComponent(registrarJButton);
         prioridadeJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 prioridadeJComboBoxActionPerformed(evt);
@@ -105,6 +116,7 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         cancelarJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         cancelarJButton.setForeground(new java.awt.Color(0, 0, 0));
         cancelarJButton.setText("Cancelar");
+        cancelarJButton.setNextFocusableComponent(descricaoJTextArea);
         cancelarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarJButtonActionPerformed(evt);
@@ -115,6 +127,8 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         registrarJButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("Registrar Ordem");
+        registrarJButton.setFocusTraversalPolicyProvider(true);
+        registrarJButton.setNextFocusableComponent(cancelarJButton);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarJButtonActionPerformed(evt);

@@ -1,3 +1,7 @@
-ID,Descrição,Local,Data de Entrada,Prioridade,Status,Técnico
-1,Consertar vazamento,Apto. 123,2024-09-24,Baixa,Aberta,null
-2,Manutenção Hídrica,Sauna,2024-09-24,Baixa,Aberta,null
+ID,Descricao,Local,Data,Prioridade,Status,Tecnico
+1,Consertar vazamento,Apto. 123,2024-09-24,Baixa,Aberta,2
+2,Manutenção Hídrica,Sauna,2024-09-24,Baixa,Cancelada,3
+3,Vazamento de Fumaça,Topo,2024-09-27,Alta,Concluída,3
+4,Vazamento no Chuveiro,Apt. 301,2024-09-27,Baixa,Andamento,3
+5,Manutencao Geral,Cozinha,2024-09-27,Baixa,Concluída,2
+6,Vazamento de Gás,Refeitório,2024-09-27,Alta,Aberta,null
