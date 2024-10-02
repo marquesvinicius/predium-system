@@ -10,6 +10,7 @@ import com.mycompany.predium.controller.OrdemServicoController;
 import com.mycompany.predium.controller.TecnicoController;
 import com.mycompany.predium.model.OrdemServico;
 import com.mycompany.predium.model.Tecnico;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.TableUtils;
 import com.mycompany.predium.utils.WindowUtils;
 import java.awt.Color;
@@ -58,6 +59,15 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, this, loginHandler).start(); // Inicia o monitoramento do arquivo de ordens
         TableUtils.configureNonEditableTable(ordensJTable);
+        KeyboardUtils.configurarEnterParaBotao(atribuirTecnicoJButton);
+        KeyboardUtils.configurarEnterParaBotao(atualizarJButton);
+        KeyboardUtils.configurarEnterParaBotao(desenvolvedorJButton);
+        KeyboardUtils.configurarEnterParaBotao(encerrarjButton);
+        KeyboardUtils.configurarEnterParaBotao(excluirJButton);
+        KeyboardUtils.configurarEnterParaBotao(gerenciarTecnicosjButton);
+        KeyboardUtils.configurarEnterParaBotao(relatoriosjButton);
+        KeyboardUtils.configurarEnterParaBotao(registrarJButton);
+
     }
 
     public PrincipalJFrame() {
@@ -254,9 +264,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         desenvolvedorJButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dev-icon.png"))); // NOI18N
         desenvolvedorJButton.setText("Desenvolvedor");
         desenvolvedorJButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        desenvolvedorJButton.setFocusTraversalPolicyProvider(true);
         desenvolvedorJButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         desenvolvedorJButton.setIconTextGap(10);
         desenvolvedorJButton.setInheritsPopupMenu(true);
+        desenvolvedorJButton.setNextFocusableComponent(encerrarjButton);
         desenvolvedorJButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         desenvolvedorJButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         desenvolvedorJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -271,8 +283,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         gerenciarTecnicosjButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/technician-icon.png"))); // NOI18N
         gerenciarTecnicosjButton.setText("Gerenciar Técnicos");
         gerenciarTecnicosjButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        gerenciarTecnicosjButton.setFocusTraversalPolicyProvider(true);
         gerenciarTecnicosjButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gerenciarTecnicosjButton.setIconTextGap(12);
+        gerenciarTecnicosjButton.setNextFocusableComponent(relatoriosjButton);
         gerenciarTecnicosjButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         gerenciarTecnicosjButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gerenciarTecnicosjButton.addActionListener(new java.awt.event.ActionListener() {
@@ -287,8 +301,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         relatoriosjButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report-icon.png"))); // NOI18N
         relatoriosjButton.setText("Relatórios");
         relatoriosjButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        relatoriosjButton.setFocusTraversalPolicyProvider(true);
         relatoriosjButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         relatoriosjButton.setIconTextGap(10);
+        relatoriosjButton.setNextFocusableComponent(desenvolvedorJButton);
         relatoriosjButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         relatoriosjButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         relatoriosjButton.addActionListener(new java.awt.event.ActionListener() {
@@ -303,8 +319,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         encerrarjButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close-icon.png"))); // NOI18N
         encerrarjButton.setText("Encerrar");
         encerrarjButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        encerrarjButton.setFocusTraversalPolicyProvider(true);
         encerrarjButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         encerrarjButton.setIconTextGap(10);
+        encerrarjButton.setNextFocusableComponent(registrarJButton);
         encerrarjButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         encerrarjButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         encerrarjButton.addActionListener(new java.awt.event.ActionListener() {
@@ -406,6 +424,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         registrarJButton.setForeground(new java.awt.Color(255, 255, 255));
         registrarJButton.setText("Registrar Ordem");
         registrarJButton.setToolTipText("Adicionar uma nova ordem de serviço");
+        registrarJButton.setFocusTraversalPolicyProvider(true);
+        registrarJButton.setNextFocusableComponent(atribuirTecnicoJButton);
         registrarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarJButtonActionPerformed(evt);
@@ -417,6 +437,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         atualizarJButton.setForeground(new java.awt.Color(255, 255, 255));
         atualizarJButton.setText("Atualizar Status");
         atualizarJButton.setToolTipText("Atualizar status da ordem selecionada");
+        atualizarJButton.setFocusTraversalPolicyProvider(true);
+        atualizarJButton.setNextFocusableComponent(excluirJButton);
         atualizarJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atualizarJButtonActionPerformed(evt);
@@ -428,6 +450,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         atribuirTecnicoJButton.setForeground(new java.awt.Color(255, 255, 255));
         atribuirTecnicoJButton.setText("Atribuir Técnico");
         atribuirTecnicoJButton.setToolTipText("Atribuir Tecnico a Ordem de Serviço selecionada");
+        atribuirTecnicoJButton.setFocusTraversalPolicyProvider(true);
+        atribuirTecnicoJButton.setNextFocusableComponent(atualizarJButton);
         atribuirTecnicoJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atribuirTecnicoJButtonActionPerformed(evt);
@@ -439,6 +463,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         excluirJButton.setForeground(new java.awt.Color(255, 255, 255));
         excluirJButton.setText("Excluir Ordem");
         excluirJButton.setToolTipText("Excluir Ordem de Serviço selecionada");
+        excluirJButton.setFocusTraversalPolicyProvider(true);
+        excluirJButton.setNextFocusableComponent(gerenciarTecnicosjButton);
         excluirJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 excluirJButtonActionPerformed(evt);

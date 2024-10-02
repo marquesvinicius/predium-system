@@ -30,6 +30,7 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
         
         KeyboardUtils.setTabFocus(novoValorTextArea);
         KeyboardUtils.configurarEnterParaBotao(editarJButton);
+        KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
 
     }
 

@@ -7,6 +7,7 @@ package com.mycompany.predium.view;
 import com.mycompany.predium.FileWatcher;
 import com.mycompany.predium.controller.TecnicoController;
 import com.mycompany.predium.model.Tecnico;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.TableUtils;
 import com.mycompany.predium.utils.WindowUtils;
 import java.io.BufferedReader;
@@ -37,6 +38,10 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
         new FileWatcher(path, this, tecnicoController).start();
 
         TableUtils.configureNonEditableTable(tecnicosjTable);
+        KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
+        KeyboardUtils.configurarEnterParaBotao(novoTecnicoJButton);
+        KeyboardUtils.configurarEnterParaBotao(editarTecnicoJButton);
+        KeyboardUtils.configurarEnterParaBotao(excluirTecnicoJButton);
         WindowUtils.centralizarTela(this);
     }
 
