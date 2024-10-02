@@ -38,7 +38,7 @@ public class CadastroJFrame extends javax.swing.JFrame {
         KeyboardUtils.setTabFocus(usernameJTextArea);
         KeyboardUtils.setTabFocus(jPasswordField);
         KeyboardUtils.setTabFocus(confirmPasswordField);
-        WindowUtils.configurarEnterParaBotao(registrarJButton);
+        KeyboardUtils.configurarEnterParaBotao(registrarJButton);
         
         if (jPasswordField != null && confirmPasswordField != null) {
             new PlaceholderField(jPasswordField, "Digite sua senha");

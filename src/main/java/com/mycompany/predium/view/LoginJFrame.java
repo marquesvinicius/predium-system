@@ -36,8 +36,8 @@ public class LoginJFrame extends javax.swing.JFrame {
         KeyboardUtils.setTabFocus(jPasswordField);
         KeyboardUtils.setTabFocus(entrarJButton);
         KeyboardUtils.setTabFocus(registrarJButton);
-        WindowUtils.configurarEnterParaBotao(entrarJButton);
-        WindowUtils.configurarEnterParaBotao(registrarJButton);
+        KeyboardUtils.configurarEnterParaBotao(entrarJButton);
+        KeyboardUtils.configurarEnterParaBotao(registrarJButton);
 
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, loginHandler).start(); // Inicia o monitoramento do arquivo de usuários

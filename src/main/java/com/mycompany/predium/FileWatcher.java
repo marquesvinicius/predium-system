@@ -31,7 +31,7 @@ public class FileWatcher extends Thread {
     private final GerenciarTecnicosJFrame gerenciarTecnicosFrame;
     private final LoginHandler loginHandler;
     private final TecnicoController tecnicoController;
-    private final Set<String> usuariosExistentes = new HashSet<>(); 
+    private final Set<String> usuariosExistentes = new HashSet<>();
 
     // Construtor para ordens de serviço
     public FileWatcher(Path path, PrincipalJFrame principalFrame, LoginHandler loginHandler) {
@@ -50,7 +50,7 @@ public class FileWatcher extends Thread {
         this.gerenciarTecnicosFrame = null;
         this.tecnicoController = null;
     }
-    
+
     // Construtor para técnicos
     public FileWatcher(Path path, GerenciarTecnicosJFrame gerenciarTecnicosFrame, TecnicoController tecnicoController) {
         this.path = path;
@@ -75,26 +75,30 @@ public class FileWatcher extends Thread {
 
                 for (WatchEvent<?> event : key.pollEvents()) {
                     if (event.kind() == ENTRY_MODIFY) {
-                        List<Usuario> novosUsuarios = carregarUsuariosDoArquivo();
+                        Path modifiedFile = (Path) event.context();
+                        String fileName = modifiedFile.toString();
 
-                        // Atualiza usuários se LoginHandler não for nulo
-                        if (loginHandler != null) {
-                            loginHandler.atualizarUsuarios(novosUsuarios);
-                            for (Usuario usuario : novosUsuarios) {
-                                if (!usuariosExistentes.contains(usuario.getUsername())) {
-                                    usuariosExistentes.add(usuario.getUsername());
+                        if (fileName.equals("ordens.csv")) {
+                            if (principalFrame != null) {
+                                principalFrame.atualizarTabela();
+                            }
+                        } else if (fileName.equals("tecnicos.csv")) {
+                            if (gerenciarTecnicosFrame != null) {
+                                gerenciarTecnicosFrame.atualizarTabelaTecnicos();
+                            }
+                            if (principalFrame != null) {
+                                principalFrame.atualizarTabela();
+                            }
+                        } else if (fileName.equals("usuarios.csv")) {
+                            List<Usuario> novosUsuarios = carregarUsuariosDoArquivo();
+                            if (loginHandler != null) {
+                                loginHandler.atualizarUsuarios(novosUsuarios);
+                                for (Usuario usuario : novosUsuarios) {
+                                    if (!usuariosExistentes.contains(usuario.getUsername())) {
+                                        usuariosExistentes.add(usuario.getUsername());
+                                    }
                                 }
                             }
-                        }
-
-                        // Atualiza a tabela se PrincipalJFrame não for nulo
-                        if (principalFrame != null) {
-                            principalFrame.atualizarTabela();
-                        }
-
-                        // Atualiza a tabela de técnicos se GerenciarTecnicosJFrame não for nulo
-                        if (gerenciarTecnicosFrame != null) {
-                            gerenciarTecnicosFrame.atualizarTabelaTecnicos();
                         }
                     }
                 }

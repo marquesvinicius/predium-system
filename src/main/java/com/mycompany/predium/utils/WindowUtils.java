@@ -26,14 +26,4 @@ public class WindowUtils {
         dialog.setLocationRelativeTo(null);
     }
 
-    public static void configurarEnterParaBotao(JButton button) {
-        button.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    button.doClick(); // Executa a ação do JButton
-                }
-            }
-        });
-    }
 }

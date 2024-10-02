@@ -5,6 +5,7 @@
 package com.mycompany.predium.view;
 
 import com.mycompany.predium.controller.TecnicoController;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.WindowUtils;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
@@ -27,27 +28,15 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        setTabFocus(nomeJTextArea);
-        setTabFocus(especialidadeJTextArea);
+        KeyboardUtils.setTabFocus(nomeJTextArea);
+        KeyboardUtils.setTabFocus(especialidadeJTextArea);
+        KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
+        KeyboardUtils.configurarEnterParaBotao(registrarTecnicoJButton);
         
         WindowUtils.centralizarTela(this);
         this.tecnicoController = tecnicoController;
     }
     
-        private void setTabFocus(JComponent component) {
-        component.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                    e.consume(); // Evita que a tabulação padrão ocorra
-                    Component next = component.getFocusTraversalPolicy().getComponentAfter(component.getParent(), component);
-                    if (next != null) {
-                        next.requestFocus(); // Move o foco para o próximo componente
-                    }
-                }
-            }
-        });
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -33,8 +33,8 @@ public class RegistrarOrdemJDialog extends javax.swing.JDialog {
         WindowUtils.centralizarTela(this);
         KeyboardUtils.setTabFocus(descricaoJTextArea);
         KeyboardUtils.setTabFocus(localJTextArea);
-        WindowUtils.configurarEnterParaBotao(registrarJButton);
-        WindowUtils.configurarEnterParaBotao(cancelarJButton);
+        KeyboardUtils.configurarEnterParaBotao(registrarJButton);
+        KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
     }
 
     /**

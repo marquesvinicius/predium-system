@@ -11,6 +11,7 @@ package com.mycompany.predium.utils;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 
 public class KeyboardUtils {
@@ -26,6 +27,17 @@ public class KeyboardUtils {
                     if (next != null) {
                         next.requestFocus(); // Move o foco para o próximo componente
                     }
+                }
+            }
+        });
+    }
+
+    public static void configurarEnterParaBotao(JButton button) {
+        button.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    button.doClick(); // Executa a ação do JButton
                 }
             }
         });

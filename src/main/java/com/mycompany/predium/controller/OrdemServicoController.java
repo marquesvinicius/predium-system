@@ -47,15 +47,13 @@ public class OrdemServicoController {
         try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_ORDENS))) {
             String linha;
             int maiorId = 0;
-            boolean primeiraLinha = true; // Flag para ignorar o cabeçalho
+            boolean primeiraLinha = true;
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    primeiraLinha = false; // Ignora o cabeçalho
+                    primeiraLinha = false;
                     continue;
                 }
-
                 String[] dados = linha.split(",");
-                // Verifica se o primeiro dado (ID) é numérico antes de tentar converter
                 try {
                     int id = Integer.parseInt(dados[0]);
                     if (id > maiorId) {
@@ -65,13 +63,14 @@ public class OrdemServicoController {
                     System.err.println("Erro ao processar ID no arquivo de ordens: " + dados[0]);
                 }
             }
-            contadorId = maiorId + 1; // O próximo ID será o maior ID + 1
+            contadorId = maiorId + 1;
         } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de ordens: " + e.getMessage());
         }
     }
 
     public void adicionarOrdem(OrdemServico ordem) {
+        ordem.setId(gerarNovoId());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_ORDENS, true))) {
             writer.write(ordem.toCSV());
             writer.newLine();
@@ -118,10 +117,10 @@ public class OrdemServicoController {
         return ordensList;
     }
 
-    public static boolean atualizarStatusOrdem(String ordemId, String novoStatus) {
+    public boolean atualizarStatusOrdem(String ordemId, String novoStatus) {
         try {
             // Carregar ordens do arquivo CSV
-            List<OrdemServico> ordens = carregarOrdens(); // Método para carregar as ordens
+            List<OrdemServico> ordens = this.carregarOrdens(); // Método para carregar as ordens
 
             for (OrdemServico ordem : ordens) {
                 if (ordem.getId().equals(Integer.parseInt(ordemId))) {
@@ -139,14 +138,23 @@ public class OrdemServicoController {
         }
     }
 
-    private static List<OrdemServico> carregarOrdens() {
+    public boolean removerOrdemServico(int id) {
+        List<OrdemServico> ordens = carregarOrdens();
+        boolean removido = ordens.removeIf(ordem -> ordem.getId() == id);
+        if (removido) {
+            return salvarOrdens(ordens);
+        }
+        return false;
+    }
+
+    public List<OrdemServico> carregarOrdens() {
         List<OrdemServico> ordens = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_ORDENS))) {
             String linha;
-            boolean primeiraLinha = true; // Flag para ignorar o cabeçalho
+            boolean primeiraLinha = true;
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    primeiraLinha = false; // Ignora o cabeçalho
+                    primeiraLinha = false;
                     continue;
                 }
                 OrdemServico ordem = OrdemServico.fromCSV(linha);
@@ -158,9 +166,9 @@ public class OrdemServicoController {
         return ordens;
     }
 
-    public static boolean atribuirTecnico(int ordemId, int tecnicoId) {
+    public boolean atribuirTecnico(int ordemId, int tecnicoId) {
         try {
-            List<OrdemServico> ordens = carregarOrdens();
+            List<OrdemServico> ordens = this.carregarOrdens();
             boolean ordemEncontrada = false;
 
             for (OrdemServico ordem : ordens) {
@@ -184,9 +192,9 @@ public class OrdemServicoController {
         }
     }
 
-    private static boolean salvarOrdens(List<OrdemServico> ordens) {
+    public boolean salvarOrdens(List<OrdemServico> ordens) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_ORDENS))) {
-            writer.write("ID,Descricao,Local,Data,Prioridade,Status,Tecnico\n"); // Cabeçalho atualizado
+            writer.write("ID,Descricao,Local,Data,Prioridade,Status,Tecnico\n"); // Cabeçalho
             for (OrdemServico ordem : ordens) {
                 writer.write(ordem.toCSV());
                 writer.newLine();

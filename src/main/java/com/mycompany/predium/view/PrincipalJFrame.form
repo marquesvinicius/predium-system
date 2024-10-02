@@ -56,13 +56,13 @@
                       <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" alignment="2" min="-2" pref="883" max="-2" attributes="0"/>
-                      <Group type="102" alignment="2" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="registrarJButton" min="-2" pref="181" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                          <Component id="atualizarJButton" min="-2" pref="181" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                          <Component id="atribuirTecnicoJButton" min="-2" pref="181" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                          <Component id="atribuirTecnicoJButton" min="-2" pref="181" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="atualizarJButton" min="-2" pref="181" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="excluirJButton" min="-2" pref="181" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -91,9 +91,9 @@
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="registrarJButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
-                      <Component id="atualizarJButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                       <Component id="atribuirTecnicoJButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                       <Component id="excluirJButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="atualizarJButton" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="95" max="32767" attributes="0"/>
               </Group>

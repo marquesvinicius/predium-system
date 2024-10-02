@@ -36,7 +36,8 @@ public class AtribuirTecnicosJDialog extends javax.swing.JDialog {
         // Debug: Imprimir detalhes da ordem
         System.out.println("Ordem recebida: ID = " + ordem.getId() + ", Descrição = " + ordem.getDescricao());
         preencherLabels(ordem);
-        tecnicoController = new TecnicoController();
+        this.tecnicoController = new TecnicoController();
+        this.ordemController = new OrdemServicoController();
 
         carregarTecnicosParaTabela();
 

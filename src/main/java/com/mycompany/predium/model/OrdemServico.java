@@ -28,6 +28,7 @@ public class OrdemServico {
         this.data = LocalDate.now();  // A data de criação da ordem é a data atual
         this.prioridade = prioridade;
         this.status = "Aberta";  // Inicialmente, a ordem começa com o status 'Aberto'
+        this.tecnicoResponsavel = null;
     }
 
     public OrdemServico() {

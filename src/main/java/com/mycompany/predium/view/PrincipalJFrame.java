@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -73,24 +74,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
         DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
 
-        boolean primeiraLinha = true;
         for (String[] ordem : ordens) {
-            if (primeiraLinha) {
-                primeiraLinha = false;
-                continue;
-            }
-
-            // Verificar se o técnico ainda existe
+            // Substituir o ID do técnico pelo nome
             if (!ordem[6].equals("null")) {
                 int tecnicoId = Integer.parseInt(ordem[6]);
-                Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
-                if (tecnico != null) {
-                    ordem[6] = tecnico.getNome();
-                } else {
-                    ordem[6] = "Não atribuído";
-                    // Atualizar a ordem no controller para remover o técnico
-                    ordemController.removerTecnicoDaOrdem(Integer.parseInt(ordem[0]));
-                }
+                String nomeTecnico = tecnicoController.buscarTecnicoPorId(tecnicoId).getNome();
+                ordem[6] = nomeTecnico;
             } else {
                 ordem[6] = "Não atribuído";
             }
@@ -99,7 +88,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         }
 
         ordensJTable.setModel(tableModel);
-
         configurarCorLinhas();
     }
 
@@ -118,16 +106,18 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 String[] dados = linha.split(",");
 
-                // Verificar se o técnico ainda existe
+                // Substituir o ID do técnico pelo nome
                 if (!dados[6].equals("null")) {
-                    int tecnicoId = Integer.parseInt(dados[6]);
-                    Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
-                    if (tecnico != null) {
-                        dados[6] = tecnico.getNome();
-                    } else {
-                        dados[6] = "Não atribuído";
-                        // Atualizar a ordem no controller para remover o técnico
-                        ordemController.removerTecnicoDaOrdem(Integer.parseInt(dados[0]));
+                    try {
+                        int tecnicoId = Integer.parseInt(dados[6]);
+                        Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
+                        if (tecnico != null) {
+                            dados[6] = tecnico.getNome();
+                        } else {
+                            dados[6] = "Técnico não encontrado";
+                        }
+                    } catch (NumberFormatException e) {
+                        dados[6] = "ID inválido";
                     }
                 } else {
                     dados[6] = "Não atribuído";
@@ -138,9 +128,9 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Erro ao ler o arquivo de ordens.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Código para ajustar larguras das colunas (como mencionado anteriormente)
         configurarCorLinhas();
+        TableUtils.configureNonEditableTable(ordensJTable);
+
     }
 
     public void atualizarArquivoCSV() {
@@ -468,11 +458,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 883, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainJPanelLayout.createSequentialGroup()
                         .addComponent(registrarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(atualizarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(atribuirTecnicoJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41)
+                        .addComponent(atribuirTecnicoJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(atualizarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
                         .addComponent(excluirJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(76, 76, 76))
             .addGroup(mainJPanelLayout.createSequentialGroup()
@@ -496,9 +486,9 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(atualizarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(atribuirTecnicoJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(excluirJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(excluirJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(atualizarJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(95, Short.MAX_VALUE))
         );
 
@@ -519,7 +509,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void excluirJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirJButtonActionPerformed
-        // TODO add your handling code here:
         int selectedRow = ordensJTable.getSelectedRow();
         if (selectedRow >= 0) {
             int confirmation = JOptionPane.showConfirmDialog(this,
@@ -528,10 +517,40 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION);
 
             if (confirmation == JOptionPane.YES_OPTION) {
-                // Remove a ordem da tabela
-                ((DefaultTableModel) ordensJTable.getModel()).removeRow(selectedRow);
-                // Atualiza o arquivo CSV
-                atualizarArquivoCSV();
+                String ordemId = ordensJTable.getValueAt(selectedRow, 0).toString();
+
+                // Remove a ordem do controlador
+                boolean removido = ordemController.removerOrdemServico(Integer.parseInt(ordemId));
+
+                if (removido) {
+                    // Obtém o modelo da tabela
+                    DefaultTableModel model = (DefaultTableModel) ordensJTable.getModel();
+
+                    // Converte o índice da linha selecionada para o índice do modelo
+                    int modelRow = ordensJTable.convertRowIndexToModel(selectedRow);
+
+                    // Remove a linha do modelo se ela ainda existir
+                    if (modelRow < model.getRowCount()) {
+                        model.removeRow(modelRow);
+                        ordensJTable.clearSelection();
+                        JOptionPane.showMessageDialog(this,
+                                "Ordem removida com sucesso.",
+                                "Sucesso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        // A linha já foi removida, apenas atualize a tabela
+                        model.fireTableDataChanged();
+                        JOptionPane.showMessageDialog(this,
+                                "Ordem removida com sucesso.",
+                                "Sucesso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Não foi possível remover a ordem.",
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this,
@@ -545,10 +564,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         int selectedRow = ordensJTable.getSelectedRow(); // Obter a linha selecionada da tabela
         if (selectedRow != -1) { // Verifica se uma linha está selecionada
             // Coletar as informações da ordem
-            String ordemId = ordensJTable.getValueAt(selectedRow, 0).toString(); // Supondo que a coluna 0 seja o ID
-            String descricao = ordensJTable.getValueAt(selectedRow, 1).toString(); // Supondo que a coluna 1 seja a descrição
-            String statusAtual = ordensJTable.getValueAt(selectedRow, 5).toString(); // Supondo que a coluna 5 seja o status
-            String local = ordensJTable.getValueAt(selectedRow, 2).toString(); // Supondo que a coluna 2 seja o local
+            String ordemId = ordensJTable.getValueAt(selectedRow, 0).toString();
+            String descricao = ordensJTable.getValueAt(selectedRow, 1).toString();
+            String statusAtual = ordensJTable.getValueAt(selectedRow, 5).toString();
+            String local = ordensJTable.getValueAt(selectedRow, 2).toString();
 
             int ordemIdInt = Integer.parseInt(ordemId);
 

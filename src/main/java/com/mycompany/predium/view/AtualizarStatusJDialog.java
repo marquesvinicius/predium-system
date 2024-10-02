@@ -5,6 +5,7 @@
 package com.mycompany.predium.view;
 
 import com.mycompany.predium.controller.OrdemServicoController;
+import com.mycompany.predium.utils.KeyboardUtils;
 import com.mycompany.predium.utils.WindowUtils;
 import javax.swing.JOptionPane;
 
@@ -13,6 +14,8 @@ import javax.swing.JOptionPane;
  * @author MarquesV
  */
 public class AtualizarStatusJDialog extends javax.swing.JDialog {
+    
+    private OrdemServicoController ordemController;
 
     /**
      * Creates new form AtualizarStatusJDialog
@@ -20,9 +23,10 @@ public class AtualizarStatusJDialog extends javax.swing.JDialog {
     public AtualizarStatusJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.ordemController = new OrdemServicoController();
         WindowUtils.centralizarTela(this);
-        WindowUtils.configurarEnterParaBotao(atualizarJButton);
-        WindowUtils.configurarEnterParaBotao(cancelarJButton);
+        KeyboardUtils.configurarEnterParaBotao(atualizarJButton);
+        KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
     }
 
     public void setOrdemInfo(String ordemId, String descricao, String statusAtual, String local) {
@@ -192,7 +196,7 @@ public class AtualizarStatusJDialog extends javax.swing.JDialog {
         // Aqui você deve chamar um método do seu controlador que atualiza a ordem no arquivo CSV.
         // Supondo que você tenha um método chamado `atualizarStatusOrdem` no seu controlador:
         String ordemId = ordemIDJLabel.getText().replaceAll("[^0-9]", ""); // Obtém o ID da ordem
-        boolean sucesso = OrdemServicoController.atualizarStatusOrdem(ordemId, novoStatus); // Atualiza o status
+        boolean sucesso = this.ordemController.atualizarStatusOrdem(ordemId, novoStatus); // Atualiza o status
 
         if (sucesso) {
             JOptionPane.showMessageDialog(this, "Status da ordem atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
