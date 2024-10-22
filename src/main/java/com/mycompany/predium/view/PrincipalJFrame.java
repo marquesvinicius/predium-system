@@ -53,11 +53,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.ordemController = new OrdemServicoController();
 
         carregarOrdensParaTabela();
-        configurarCorLinhas(); // Adicione esta linha
+        configurarCorLinhas();
         atualizarTabela();
 
         Path path = Paths.get("src/main/resources/db");
-        new FileWatcher(path, this, loginHandler).start(); // Inicia o monitoramento do arquivo de ordens
+        new FileWatcher(path, this, loginHandler).start(); 
         TableUtils.configureNonEditableTable(ordensJTable);
         KeyboardUtils.configurarEnterParaBotao(atribuirTecnicoJButton);
         KeyboardUtils.configurarEnterParaBotao(atualizarJButton);
@@ -77,30 +77,37 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         TableUtils.configureNonEditableTable(ordensJTable);
     }
 
-    private void carregarOrdensParaTabela() {
-        List<String[]> ordens = ordemController.carregarOrdensServicoString();
-        TecnicoController tecnicoController = new TecnicoController();
+private void carregarOrdensParaTabela() {
+    List<String[]> ordens = ordemController.carregarOrdensServicoString();
+    TecnicoController tecnicoController = new TecnicoController();
 
-        String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
-        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
+    String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
+    DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
 
-        for (String[] ordem : ordens) {
-            // Substituir o ID do técnico pelo nome
-            if (!ordem[6].equals("null")) {
+    for (String[] ordem : ordens) {
+        // Verificar se o ID do técnico existe e é válido
+        if (ordem[6] != null && !ordem[6].equals("null") && !ordem[6].trim().isEmpty()) {
+            try {
                 int tecnicoId = Integer.parseInt(ordem[6]);
-                String nomeTecnico = tecnicoController.buscarTecnicoPorId(tecnicoId).getNome();
-                ordem[6] = nomeTecnico;
-            } else {
+                Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
+                if (tecnico != null) {
+                    ordem[6] = tecnico.getNome();
+                } else {
+                    ordem[6] = "Técnico não encontrado";
+                }
+            } catch (NumberFormatException e) {
                 ordem[6] = "Não atribuído";
             }
-
-            tableModel.addRow(ordem);
+        } else {
+            ordem[6] = "Não atribuído";
         }
 
-        ordensJTable.setModel(tableModel);
-        configurarCorLinhas();
+        tableModel.addRow(ordem);
     }
 
+    ordensJTable.setModel(tableModel);
+    configurarCorLinhas();
+}
     public void atualizarTabela() {
         DefaultTableModel model = (DefaultTableModel) ordensJTable.getModel();
         model.setRowCount(0);
@@ -651,6 +658,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private void relatoriosjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatoriosjButtonActionPerformed
         // TODO add your handling code here:
+        RelatoriosJFrame relatoriosFrame = new RelatoriosJFrame();
+        relatoriosFrame.setVisible(true);
     }//GEN-LAST:event_relatoriosjButtonActionPerformed
 
     private void desenvolvedorJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desenvolvedorJButtonActionPerformed

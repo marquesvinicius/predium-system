@@ -1,4 +1,5 @@
 ID,Descricao,Local,Data,Prioridade,Status,Tecnico
-1,Consertar vazamento,Apto. 123,2024-09-24,Baixa,Cancelada,null
-2,Manutenção Hídrica,Sauna,2024-09-24,Baixa,Cancelada,null
-3,Vazamento de Fumaça,Topo,2024-09-27,Alta,Concluída,null
+1,Fio desencapado,Apto 203,2024-10-03,Média,Concluída,null
+2,Vazamento,Apto. 22,2024-10-21,Média,Andamento,9
+3,Aparar grama,Jardim do Patio,2024-10-21,Baixa,Andamento,8
+4,Limpeza e manutencao,Depósito,2024-10-21,Média,Concluída,11
