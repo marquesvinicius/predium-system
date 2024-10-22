@@ -18,25 +18,28 @@ import javax.swing.JOptionPane;
  * @author MarquesV
  */
 public class NovoTecnicoJDialog extends javax.swing.JDialog {
-    
-    private  TecnicoController tecnicoController;
 
-    /**
-     * Creates new form NovoTecnicoJDialog
-     */
+    private final TecnicoController tecnicoController;
+
     public NovoTecnicoJDialog(java.awt.Frame parent, boolean modal, TecnicoController tecnicoController) {
         super(parent, modal);
+        this.tecnicoController = tecnicoController;
+
         initComponents();
-        
+        setupDialog();
+    }
+
+    private void setupDialog() {
+        WindowUtils.centralizarTela(this);
+        configureKeyboardNavigation();
+    }
+
+    private void configureKeyboardNavigation() {
         KeyboardUtils.setTabFocus(nomeJTextArea);
         KeyboardUtils.setTabFocus(especialidadeJTextArea);
         KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
         KeyboardUtils.configurarEnterParaBotao(registrarTecnicoJButton);
-        
-        WindowUtils.centralizarTela(this);
-        this.tecnicoController = tecnicoController;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,23 +187,25 @@ public class NovoTecnicoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelarJButtonActionPerformed
 
     private void registrarTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarTecnicoJButtonActionPerformed
-        // TODO add your handling code here:
-        // Recupera os dados da interface
-        String nome = nomeJTextArea.getText();
-        String especialidade = especialidadeJTextArea.getText();
-        
-        if (!nome.isEmpty() && !especialidade.isEmpty()) {
+        String nome = nomeJTextArea.getText().trim();
+        String especialidade = especialidadeJTextArea.getText().trim();
+
+        if (validarCampos(nome, especialidade)) {
             tecnicoController.cadastrarTecnico(nome, especialidade);
             JOptionPane.showMessageDialog(this, "Técnico cadastrado com sucesso!");
             dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
 
-        // Fecha o dialog após o registro
-        this.dispose();
-
     }//GEN-LAST:event_registrarTecnicoJButtonActionPerformed
+
+    private boolean validarCampos(String nome, String especialidade) {
+        if (nome.isEmpty() || especialidade.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @param args the command line arguments

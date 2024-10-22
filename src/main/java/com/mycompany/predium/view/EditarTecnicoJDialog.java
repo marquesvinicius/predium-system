@@ -17,31 +17,37 @@ import javax.swing.JOptionPane;
 public class EditarTecnicoJDialog extends javax.swing.JDialog {
 
     private static int tecnicoId;
+    private Tecnico tecnico;
+    private final TecnicoController tecnicoController;
 
-    /**
-     * Creates new form EditarTecnicoJDialog
-     */
     public EditarTecnicoJDialog(java.awt.Frame parent, boolean modal, int tecnicoId) {
         super(parent, modal);
-        initComponents();
-        WindowUtils.centralizarTela(this);
         this.tecnicoId = tecnicoId;
-        carregarDadosTecnico(tecnicoId);
-        
+        this.tecnicoController = new TecnicoController();
+
+        initComponents();
+        setupDialog();
+        carregarDadosTecnico();
+    }
+
+    private void setupDialog() {
+        WindowUtils.centralizarTela(this);
         KeyboardUtils.setTabFocus(novoValorTextArea);
         KeyboardUtils.configurarEnterParaBotao(editarJButton);
         KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
 
     }
 
-    public void carregarDadosTecnico(int id) {
-        // Carregar dados do técnico a partir do CSV usando o ID
-        TecnicoController controller = new TecnicoController();
-        Tecnico tecnico = controller.buscarTecnicoPorId(id);
-
+    private void carregarDadosTecnico() {
+        tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId); // Armazena o técnico
         if (tecnico != null) {
-            tecnicoSelecionadoJLabel.setText("Técnico Selecionado: {ID: " + tecnico.getId() + "}");
-            // Aqui poderíamos preencher o campo com o valor atual do técnico para edição, se necessário.
+            tecnicoSelecionadoJLabel.setText(String.format("Técnico Selecionado: {ID: %d, Nome: %s}",
+                    tecnico.getId(), tecnico.getNome()));
+            novoValorTextArea.setText(tecnico.getNome()); // Define o valor inicial
+        } else {
+            JOptionPane.showMessageDialog(this, "Técnico não encontrado!", "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            dispose();
         }
     }
 
@@ -203,29 +209,39 @@ public class EditarTecnicoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelarJButtonActionPerformed
 
     private void editarJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarJButtonActionPerformed
-        // Obtém o campo e o novo valor digitado
         String campoSelecionado = campoAEditarJComboBox.getSelectedItem().toString();
         String novoValor = novoValorTextArea.getText().trim();
 
-        if (novoValor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "O valor não pode estar vazio!");
-            return;
+        if (validarCampo(novoValor)) {
+            boolean sucesso = tecnicoController.editarTecnico(tecnicoId, campoSelecionado, novoValor);
+            if (sucesso) {
+                JOptionPane.showMessageDialog(this, "Técnico atualizado com sucesso!");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar técnico.", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
-
-        TecnicoController controller = new TecnicoController();
-        boolean sucesso = controller.editarTecnico(tecnicoId, campoSelecionado, novoValor);
-
-        if (sucesso) {
-            JOptionPane.showMessageDialog(this, "Técnico atualizado com sucesso!");
-            this.dispose(); // Fecha a tela após sucesso
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar técnico.");
-        }
-
     }//GEN-LAST:event_editarJButtonActionPerformed
 
+    private boolean validarCampo(String valor) {
+        if (valor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo não pode estar vazio!",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
     private void campoAEditarJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoAEditarJComboBoxActionPerformed
         // TODO add your handling code here:
+        String campoSelecionado = campoAEditarJComboBox.getSelectedItem().toString();
+        if (tecnico != null) {
+            if (campoSelecionado.equals("Nome")) {
+                novoValorTextArea.setText(tecnico.getNome());
+            } else if (campoSelecionado.equals("Especialidade")) {
+                novoValorTextArea.setText(tecnico.getEspecialidade());
+            }
+        }
     }//GEN-LAST:event_campoAEditarJComboBoxActionPerformed
 
     /**
