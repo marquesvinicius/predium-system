@@ -1,5 +1,6 @@
 ID,Descricao,Local,Data,Prioridade,Status,Tecnico
-1,Fio desencapado,Apto 203,2024-10-03,Média,Concluída,null
 2,Vazamento,Apto. 22,2024-10-21,Média,Andamento,9
-3,Aparar grama,Jardim do Patio,2024-10-21,Baixa,Andamento,8
-4,Limpeza e manutencao,Depósito,2024-10-21,Média,Concluída,11
+3,Aparar grama,Jardim do Patio,2024-10-21,Baixa,Andamento,11
+5,Manutencao Eletrica,Hall,2024-10-22,Alta,Concluída,12
+6,Reposicao Estoque,Maquina do Hall,2024-10-22,Baixa,Aberta,null
+7,Limpeza Geral,Almoxarifado,2024-10-22,Baixa,Cancelada,null

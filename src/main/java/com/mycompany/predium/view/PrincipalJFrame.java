@@ -57,7 +57,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         atualizarTabela();
 
         Path path = Paths.get("src/main/resources/db");
-        new FileWatcher(path, this, loginHandler).start(); 
+        new FileWatcher(path, this, loginHandler).start();
         TableUtils.configureNonEditableTable(ordensJTable);
         KeyboardUtils.configurarEnterParaBotao(atribuirTecnicoJButton);
         KeyboardUtils.configurarEnterParaBotao(atualizarJButton);
@@ -77,77 +77,35 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         TableUtils.configureNonEditableTable(ordensJTable);
     }
 
-private void carregarOrdensParaTabela() {
-    List<String[]> ordens = ordemController.carregarOrdensServicoString();
-    TecnicoController tecnicoController = new TecnicoController();
-
-    String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
-    DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
-
-    for (String[] ordem : ordens) {
-        // Verificar se o ID do técnico existe e é válido
-        if (ordem[6] != null && !ordem[6].equals("null") && !ordem[6].trim().isEmpty()) {
-            try {
-                int tecnicoId = Integer.parseInt(ordem[6]);
-                Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
-                if (tecnico != null) {
-                    ordem[6] = tecnico.getNome();
-                } else {
-                    ordem[6] = "Técnico não encontrado";
-                }
-            } catch (NumberFormatException e) {
-                ordem[6] = "Não atribuído";
-            }
-        } else {
-            ordem[6] = "Não atribuído";
-        }
-
-        tableModel.addRow(ordem);
-    }
-
-    ordensJTable.setModel(tableModel);
-    configurarCorLinhas();
-}
-    public void atualizarTabela() {
-        DefaultTableModel model = (DefaultTableModel) ordensJTable.getModel();
-        model.setRowCount(0);
+    private void carregarOrdensParaTabela() {
+        List<String[]> ordens = ordemController.carregarOrdensServicoString();
         TecnicoController tecnicoController = new TecnicoController();
 
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/db/ordens.csv"))) {
-            String linha;
-            boolean primeiraLinha = true;
-            while ((linha = br.readLine()) != null) {
-                if (primeiraLinha) {
-                    primeiraLinha = false;
-                    continue;
-                }
-                String[] dados = linha.split(",");
+        String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
+        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
 
-                // Substituir o ID do técnico pelo nome
-                if (!dados[6].equals("null")) {
-                    try {
-                        int tecnicoId = Integer.parseInt(dados[6]);
-                        Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
-                        if (tecnico != null) {
-                            dados[6] = tecnico.getNome();
-                        } else {
-                            dados[6] = "Técnico não encontrado";
-                        }
-                    } catch (NumberFormatException e) {
-                        dados[6] = "ID inválido";
-                    }
-                } else {
-                    dados[6] = "Não atribuído";
+        for (String[] ordem : ordens) {
+            // Substituir o ID do técnico pelo nome
+            if (ordem[6] != null && !"null".equals(ordem[6])) {
+                try {
+                    int tecnicoId = Integer.parseInt(ordem[6]);
+                    Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
+                    ordem[6] = tecnico != null ? tecnico.getNome() : "Técnico não encontrado";
+                } catch (NumberFormatException e) {
+                    ordem[6] = "ID inválido";
                 }
-
-                model.addRow(dados);
+            } else {
+                ordem[6] = "Não atribuído";
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao ler o arquivo de ordens.", "Erro", JOptionPane.ERROR_MESSAGE);
+            tableModel.addRow(ordem);
         }
-        configurarCorLinhas();
-        TableUtils.configureNonEditableTable(ordensJTable);
 
+        ordensJTable.setModel(tableModel);
+        configurarCorLinhas();
+    }
+
+    public void atualizarTabela() {
+        carregarOrdensParaTabela();
     }
 
     public void atualizarArquivoCSV() {
