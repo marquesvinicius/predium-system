@@ -6,6 +6,7 @@ package com.mycompany.predium.view;
 
 import com.mycompany.predium.controller.OrdemServicoController;
 import com.mycompany.predium.controller.TecnicoController;
+import com.mycompany.predium.model.Tecnico;
 import com.mycompany.predium.utils.WindowUtils;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,8 +26,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RelatoriosJFrame extends javax.swing.JFrame {
 
-    private  OrdemServicoController ordemController;
-    private  TecnicoController tecnicoController;
+    private OrdemServicoController ordemController;
+    private TecnicoController tecnicoController;
 
     /**
      * Creates new form RelatoriosJFrame
@@ -36,13 +37,13 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
         WindowUtils.centralizarTela(this);
         this.ordemController = new OrdemServicoController();
         this.tecnicoController = new TecnicoController();
-        
+
         // Seleciona o radioButton "Todas" por padrão
         todasjRadioButton.setSelected(true);
-        
+
         // Configura a tabela inicialmente com todas as ordens
         carregarOrdensParaTabela("Todas");
-        
+
         // Adiciona listeners para todos os radioButtons
         todasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Todas"));
         abertasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Aberta"));
@@ -50,13 +51,13 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
         concluidasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Concluída"));
         canceladasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Cancelada"));
     }
-    
-     private void carregarOrdensParaTabela(String filtroStatus) {
+
+    private void carregarOrdensParaTabela(String filtroStatus) {
         List<String[]> todasOrdens = ordemController.carregarOrdensServicoString();
-        
+
         String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
         DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
-        
+
         for (String[] ordem : todasOrdens) {
             // Verifica se deve incluir a ordem baseado no filtro
             if (filtroStatus.equals("Todas") || ordem[5].equals(filtroStatus)) {
@@ -64,19 +65,23 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
                 if (!ordem[6].equals("null")) {
                     try {
                         int tecnicoId = Integer.parseInt(ordem[6]);
-                        String nomeTecnico = tecnicoController.buscarTecnicoPorId(tecnicoId).getNome();
-                        ordem[6] = nomeTecnico;
+                        Tecnico tecnico = tecnicoController.buscarTecnicoPorId(tecnicoId);
+                        if (tecnico != null) {
+                            ordem[6] = tecnico.getNome();
+                        } else {
+                            ordem[6] = "Técnico não encontrado";
+                        }
                     } catch (NumberFormatException e) {
                         ordem[6] = "ID inválido";
                     }
                 } else {
                     ordem[6] = "Não atribuído";
                 }
-                
+
                 tableModel.addRow(ordem);
             }
         }
-        
+
         ordensJTable.setModel(tableModel);
     }
 
@@ -297,41 +302,48 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
     private void gerarRelatorioCSVJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerarRelatorioCSVJButtonActionPerformed
 // Determina o filtro selecionado
         String filtroSelecionado = "Todas";
-        if (abertasjRadioButton.isSelected()) filtroSelecionado = "Aberta";
-        else if (andamentojRadioButton.isSelected()) filtroSelecionado = "Em Andamento";
-        else if (concluidasjRadioButton.isSelected()) filtroSelecionado = "Concluída";
-        else if (canceladasjRadioButton.isSelected()) filtroSelecionado = "Cancelada";
-        
+        if (abertasjRadioButton.isSelected()) {
+            filtroSelecionado = "Aberta";
+        } else if (andamentojRadioButton.isSelected()) {
+            filtroSelecionado = "Em Andamento";
+        } else if (concluidasjRadioButton.isSelected()) {
+            filtroSelecionado = "Concluída";
+        } else if (canceladasjRadioButton.isSelected()) {
+            filtroSelecionado = "Cancelada";
+        }
+
         // Cria nome do arquivo com data/hora
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String dataHora = sdf.format(new Date());
         String nomeArquivoSugerido = "relatorio_" + filtroSelecionado.toLowerCase() + "_" + dataHora + ".csv";
-        
+
         // Abre diálogo para salvar arquivo
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File(nomeArquivoSugerido));
         fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos CSV (*.csv)", "csv"));
-        
+
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             File arquivoSelecionado = fileChooser.getSelectedFile();
-            
+
             // Adiciona extensão .csv se necessário
             if (!arquivoSelecionado.getName().toLowerCase().endsWith(".csv")) {
                 arquivoSelecionado = new File(arquivoSelecionado.getAbsolutePath() + ".csv");
             }
-            
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoSelecionado))) {
                 // Escreve cabeçalho
                 writer.write("ID,Descrição,Local,Data de Entrada,Prioridade,Status,Técnico\n");
-                
+
                 // Pega modelo da tabela atual (já filtrada)
                 DefaultTableModel model = (DefaultTableModel) ordensJTable.getModel();
-                
+
                 // Escreve dados
                 for (int i = 0; i < model.getRowCount(); i++) {
                     StringBuilder linha = new StringBuilder();
                     for (int j = 0; j < model.getColumnCount(); j++) {
-                        if (j > 0) linha.append(",");
+                        if (j > 0) {
+                            linha.append(",");
+                        }
                         String valor = model.getValueAt(i, j).toString();
                         // Escapa aspas duplas e adiciona aspas ao redor do valor se contiver vírgula
                         if (valor.contains(",") || valor.contains("\"") || valor.contains("\n")) {
@@ -342,17 +354,17 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
                     writer.write(linha.toString());
                     writer.newLine();
                 }
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Relatório gerado com sucesso!\nSalvo em: " + arquivoSelecionado.getAbsolutePath(),
-                    "Sucesso", 
-                    JOptionPane.INFORMATION_MESSAGE);
-                
+
+                JOptionPane.showMessageDialog(this,
+                        "Relatório gerado com sucesso!\nSalvo em: " + arquivoSelecionado.getAbsolutePath(),
+                        "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                    "Erro ao gerar relatório: " + e.getMessage(),
-                    "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Erro ao gerar relatório: " + e.getMessage(),
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_gerarRelatorioCSVJButtonActionPerformed

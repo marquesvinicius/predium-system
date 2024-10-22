@@ -59,6 +59,7 @@ com\mycompany\predium\controller\CadastroHandler.class
 com\mycompany\predium\view\EditarTecnicoJDialog$4.class
 com\mycompany\predium\view\CadastroJFrame$4.class
 com\mycompany\predium\view\EditarTecnicoJDialog$1.class
+com\mycompany\predium\view\GerenciarTecnicosJFrame$7.class
 com\mycompany\predium\view\AtribuirTecnicosJDialog$3.class
 com\mycompany\predium\view\RelatoriosJFrame$5.class
 com\mycompany\predium\view\CadastroJFrame$1.class

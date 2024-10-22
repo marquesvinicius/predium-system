@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,18 +28,21 @@ import javax.swing.table.DefaultTableModel;
 public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
 
     private TecnicoController tecnicoController;
+    private final Object tableLock = new Object(); // Lock para sincronização
 
     public GerenciarTecnicosJFrame() {
         initComponents();
-
         tecnicoController = new TecnicoController();
 
+        // Configurar a tabela primeiro
+        configurarTabela();
+
+        // Depois carregar os dados
         carregarTecnicosParaTabela();
 
         Path path = Paths.get("src/main/resources/db");
         new FileWatcher(path, this, tecnicoController).start();
 
-        TableUtils.configureNonEditableTable(tecnicosjTable);
         KeyboardUtils.configurarEnterParaBotao(cancelarJButton);
         KeyboardUtils.configurarEnterParaBotao(novoTecnicoJButton);
         KeyboardUtils.configurarEnterParaBotao(editarTecnicoJButton);
@@ -46,41 +51,43 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
     }
 
     private void carregarTecnicosParaTabela() {
-        List<String[]> tecnicos = tecnicoController.carregarTecnicos();
+        synchronized (tableLock) {
+            DefaultTableModel model = (DefaultTableModel) tecnicosjTable.getModel();
+            model.setRowCount(0); // Limpa a tabela
 
-        // Define as colunas da tabela
-        String[] colunas = {"ID", "Nome", "Especialidade"};
-
-        // Cria o modelo da tabela
-        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
-
-        // Adiciona cada técnico na tabela
-        for (String[] tecnico : tecnicos) {
-            tableModel.addRow(tecnico);
+            List<String[]> tecnicos = tecnicoController.carregarTecnicos();
+            for (String[] tecnico : tecnicos) {
+                model.addRow(tecnico);
+            }
         }
-
-        // Vincula o modelo à JTable
-        tecnicosjTable.setModel(tableModel);
     }
 
     public void atualizarTabelaTecnicos() {
-        DefaultTableModel model = (DefaultTableModel) tecnicosjTable.getModel();
-        model.setRowCount(0); // Limpa todas as linhas atuais
+        // Executa a atualização na EDT para evitar problemas de concorrência
+        SwingUtilities.invokeLater(() -> {
+            synchronized (tableLock) {
+                DefaultTableModel model = (DefaultTableModel) tecnicosjTable.getModel();
+                model.setRowCount(0);
 
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/db/tecnicos.csv"))) {
-            String linha;
-            boolean primeiraLinha = true; // Flag para ignorar a primeira linha (cabeçalho)
-            while ((linha = br.readLine()) != null) {
-                if (primeiraLinha) {
-                    primeiraLinha = false; // Ignora o cabeçalho
-                    continue;
+                try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/db/tecnicos.csv"))) {
+                    String linha;
+                    boolean primeiraLinha = true;
+                    while ((linha = br.readLine()) != null) {
+                        if (primeiraLinha) {
+                            primeiraLinha = false;
+                            continue;
+                        }
+                        String[] dados = linha.split(",");
+                        model.addRow(dados);
+                    }
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this,
+                            "Erro ao ler o arquivo de técnicos.",
+                            "Erro",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-                String[] dados = linha.split(",");
-                model.addRow(dados);
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao ler o arquivo de técnicos.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+        });
     }
 
     /**
@@ -244,21 +251,34 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_novoTecnicoJButtonActionPerformed
 
     private void excluirTecnicoJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excluirTecnicoJButtonActionPerformed
-        // TODO add your handling code here:
         int selectedRow = tecnicosjTable.getSelectedRow();
         if (selectedRow != -1) {
             int id = Integer.parseInt(tecnicosjTable.getValueAt(selectedRow, 0).toString());
-            int option = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir este técnico?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this,
+                    "Tem certeza que deseja excluir este técnico?",
+                    "Confirmar exclusão",
+                    JOptionPane.YES_NO_OPTION);
+
             if (option == JOptionPane.YES_OPTION) {
-                if (tecnicoController.excluirTecnico(id)) {
-                    atualizarTabelaTecnicos();
-                    JOptionPane.showMessageDialog(this, "Técnico excluído com sucesso!");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao excluir o técnico.", "Erro", JOptionPane.ERROR_MESSAGE);
+                synchronized (tableLock) {
+                    if (tecnicoController.excluirTecnico(id)) {
+                        // Remove diretamente do modelo ao invés de recarregar toda a tabela
+                        DefaultTableModel model = (DefaultTableModel) tecnicosjTable.getModel();
+                        model.removeRow(selectedRow);
+                        JOptionPane.showMessageDialog(this, "Técnico excluído com sucesso!");
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Erro ao excluir o técnico.",
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione um técnico para excluir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, selecione um técnico para excluir.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_excluirTecnicoJButtonActionPerformed
 
@@ -324,4 +344,20 @@ public class GerenciarTecnicosJFrame extends javax.swing.JFrame {
     private javax.swing.JButton novoTecnicoJButton;
     private javax.swing.JTable tecnicosjTable;
     // End of variables declaration//GEN-END:variables
+
+    private void configurarTabela() {
+        // Configura o modelo da tabela
+        String[] colunas = {"ID", "Nome", "Especialidade"};
+        DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tecnicosjTable.setModel(model);
+
+        // Configura o renderizador padrão uma única vez
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        tecnicosjTable.setDefaultRenderer(Object.class, renderer);
+    }
 }

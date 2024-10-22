@@ -61,11 +61,8 @@
                           </Group>
                           <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
-                                  <Component id="ordemLocalJLabel" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="ordemStatusAtualJLabel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="ordemStatusAtualJLabel" max="32767" attributes="0"/>
+                              <Component id="ordemLocalJLabel" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="atualizarJButton" min="-2" pref="620" max="-2" attributes="0"/>
@@ -88,9 +85,9 @@
                       <Component id="ordemIDJLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="ordemLocalJLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="ordemDescricaoJLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="ordemDescricaoJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ordemLocalJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="campoAEditarJLabel" min="-2" max="-2" attributes="0"/>
