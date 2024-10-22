@@ -20,10 +20,10 @@ com\mycompany\predium\model\Tecnico.class
 com\mycompany\predium\view\PrincipalJFrame.class
 com\mycompany\predium\view\GerenciarTecnicosJFrame$3.class
 com\mycompany\predium\view\CadastroJFrame$5.class
-com\mycompany\predium\view\PrincipalJFrame$11.class
 com\mycompany\predium\view\RegistrarOrdemJDialog$2.class
 com\mycompany\predium\controller\OrdemServicoController.class
 com\mycompany\predium\view\AtribuirTecnicosJDialog$4.class
+com\mycompany\predium\utils\TableUtils$StatusColorConfig.class
 com\mycompany\predium\utils\PlaceholderField$1.class
 com\mycompany\predium\view\AtualizarStatusJDialog$2.class
 com\mycompany\predium\view\GerenciarTecnicosJFrame$1.class
@@ -56,6 +56,7 @@ com\mycompany\predium\view\AtualizarStatusJDialog$4.class
 com\mycompany\predium\view\LoginJFrame$1.class
 com\mycompany\predium\Predium.class
 com\mycompany\predium\controller\CadastroHandler.class
+com\mycompany\predium\utils\TableUtils$NonEditableTableModel.class
 com\mycompany\predium\view\EditarTecnicoJDialog$4.class
 com\mycompany\predium\view\CadastroJFrame$4.class
 com\mycompany\predium\view\EditarTecnicoJDialog$1.class

@@ -44,6 +44,7 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
 
         // Configura a tabela inicialmente com todas as ordens
         carregarOrdensParaTabela("Todas");
+        TableUtils.configurarCoresOrdemServico(ordensJTable, 5);
         TableUtils.configureNonEditableTable(ordensJTable);
         // Adiciona listeners para todos os radioButtons
         todasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Todas"));
@@ -57,7 +58,7 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
         List<String[]> todasOrdens = ordemController.carregarOrdensServicoString();
 
         String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
-        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
+        DefaultTableModel tableModel = TableUtils.createNonEditableModel(colunas);
 
         for (String[] ordem : todasOrdens) {
             // Verifica se deve incluir a ordem baseado no filtro

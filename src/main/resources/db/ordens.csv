@@ -1,6 +1,6 @@
 ID,Descricao,Local,Data,Prioridade,Status,Tecnico
 2,Vazamento,Apto. 22,2024-10-21,Média,Andamento,9
 3,Aparar grama,Jardim do Patio,2024-10-21,Baixa,Andamento,11
-5,Manutencao Eletrica,Hall,2024-10-22,Alta,Concluída,null
-7,Limpeza Geral,Almoxarifado,2024-10-22,Baixa,Aberta,null
-8,Fio desencapado,Apto. 301,2024-10-22,Alta,Aberta,null
+5,Manutencao Eletrica,Hall,2024-10-22,Alta,Concluída,11
+7,Limpeza Geral,Almoxarifado,2024-10-22,Baixa,Cancelada,13
+8,Fio desencapado,Apto. 301,2024-10-22,Alta,Concluída,16

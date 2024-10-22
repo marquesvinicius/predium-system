@@ -53,7 +53,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.ordemController = new OrdemServicoController();
 
         carregarOrdensParaTabela();
-        configurarCorLinhas();
+        TableUtils.configurarCoresOrdemServico(ordensJTable, 5);
         atualizarTabela();
 
         Path path = Paths.get("src/main/resources/db");
@@ -82,7 +82,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         TecnicoController tecnicoController = new TecnicoController();
 
         String[] colunas = {"ID", "Descrição", "Local", "Data de Entrada", "Prioridade", "Status", "Técnico"};
-        DefaultTableModel tableModel = new DefaultTableModel(colunas, 0);
+        // Use the new createNonEditableModel method instead of DefaultTableModel
+        DefaultTableModel tableModel = TableUtils.createNonEditableModel(colunas);
 
         for (String[] ordem : ordens) {
             // Substituir o ID do técnico pelo nome
@@ -101,7 +102,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         }
 
         ordensJTable.setModel(tableModel);
-        configurarCorLinhas();
+        TableUtils.configurarCoresOrdemServico(ordensJTable, 5);
     }
 
     public void atualizarTabela() {
@@ -152,36 +153,36 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         }
     }
 
-    private void configurarCorLinhas() {
-        ordensJTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (!isSelected) {
-                    String status = (String) table.getModel().getValueAt(row, 5); // Assumindo que a coluna de status é a 6ª (índice 5)
-                    switch (status.toLowerCase()) {
-                        case "aberta":
-                            c.setBackground(Color.WHITE);
-                            break;
-                        case "andamento":
-                            c.setBackground(new Color(255, 255, 200)); // Amarelo suave
-                            break;
-                        case "concluída":
-                            c.setBackground(new Color(200, 255, 200)); // Verde suave
-                            break;
-                        case "cancelada":
-                            c.setBackground(new Color(255, 200, 200)); // Vermelho suave
-                            break;
-                        default:
-                            c.setBackground(Color.WHITE);
-                            break;
-                    }
-                }
-                return c;
-            }
-        });
-    }
+//    private void configurarCorLinhas() {
+//        ordensJTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+//            @Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//
+//                if (!isSelected) {
+//                    String status = (String) table.getModel().getValueAt(row, 5); // Assumindo que a coluna de status é a 6ª (índice 5)
+//                    switch (status.toLowerCase()) {
+//                        case "aberta":
+//                            c.setBackground(Color.WHITE);
+//                            break;
+//                        case "andamento":
+//                            c.setBackground(new Color(255, 255, 200)); // Amarelo suave
+//                            break;
+//                        case "concluída":
+//                            c.setBackground(new Color(200, 255, 200)); // Verde suave
+//                            break;
+//                        case "cancelada":
+//                            c.setBackground(new Color(255, 200, 200)); // Vermelho suave
+//                            break;
+//                        default:
+//                            c.setBackground(Color.WHITE);
+//                            break;
+//                    }
+//                }
+//                return c;
+//            }
+//        });
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
