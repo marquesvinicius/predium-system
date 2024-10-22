@@ -7,6 +7,7 @@ package com.mycompany.predium.view;
 import com.mycompany.predium.controller.OrdemServicoController;
 import com.mycompany.predium.controller.TecnicoController;
 import com.mycompany.predium.model.Tecnico;
+import com.mycompany.predium.utils.TableUtils;
 import com.mycompany.predium.utils.WindowUtils;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +44,7 @@ public class RelatoriosJFrame extends javax.swing.JFrame {
 
         // Configura a tabela inicialmente com todas as ordens
         carregarOrdensParaTabela("Todas");
-
+        TableUtils.configureNonEditableTable(ordensJTable);
         // Adiciona listeners para todos os radioButtons
         todasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Todas"));
         abertasjRadioButton.addActionListener(e -> carregarOrdensParaTabela("Aberta"));
